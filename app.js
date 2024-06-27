@@ -28,7 +28,8 @@ app.use(session({
     secret: secret,
     resave: false,
     saveUninitialized: false,
-    store: mongoStore
+    store: mongoStore,
+    cookie: { secure: true }
 }));
 app.use(authRoutes);
 app.use(userRoutes);

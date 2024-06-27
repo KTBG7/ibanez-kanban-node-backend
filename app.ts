@@ -44,7 +44,8 @@ app.use(session({
     secret: secret,
     resave: false,
     saveUninitialized: false,
-    store: mongoStore
+    store: mongoStore,
+    cookie: { secure: true }
 }))
 
 

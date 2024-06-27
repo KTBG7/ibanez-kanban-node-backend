@@ -5,7 +5,7 @@ var doubleCsrfUtilities = require('csrf-csrf').doubleCsrf({
         sameSite: "lax", // Recommend you make this strict if posible
         path: "/",
         secure: true,
-        signed: false
+        signed: true
     },
     size: 64,
     ignoredMethods: ["GET", "HEAD", "OPTIONS"],
