@@ -9,6 +9,7 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 var dotenv = require('dotenv');
 var authRoutes = require('./routes/authRoutes');
 var userRoutes = require('./routes/userRoutes');
+var helmet = require('helmet');
 dotenv.config();
 var secret = process.env.SESSION_SECRET;
 var mongoStore = new MongoDBStore({
@@ -16,9 +17,10 @@ var mongoStore = new MongoDBStore({
     collection: "sessions"
 });
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:5173'],
+    origin: [process.env.UI_DOMAIN],
     credentials: true
 }));
+app.use(helmet());
 app.use(cookieParser());
 app.use(bParser.json());
 app.use(bParser.urlencoded({ extended: false }));
@@ -31,7 +33,7 @@ app.use(session({
 app.use(authRoutes);
 app.use(userRoutes);
 mongoose.connect(process.env.MONGODB_SECRET).then(function (res) {
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
 })
     .catch(function (err) {
     console.log(err);

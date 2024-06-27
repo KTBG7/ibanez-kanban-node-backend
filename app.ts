@@ -20,6 +20,8 @@ const authRoutes = require('./routes/authRoutes');
 
 const userRoutes = require('./routes/userRoutes');
 
+const helmet = require('helmet');
+
 dotenv.config();
 
 const secret = process.env.SESSION_SECRET;
@@ -29,9 +31,11 @@ const mongoStore = new MongoDBStore({
 });
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:5173'],
+    origin: [process.env.UI_DOMAIN],
     credentials: true
 }))
+
+app.use(helmet());
 
 app.use(cookieParser());
 app.use(bParser.json());
@@ -50,7 +54,7 @@ app.use(authRoutes);
 app.use(userRoutes);
 
 mongoose.connect(process.env.MONGODB_SECRET).then((res:any)=>{
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
 })
     .catch((err:any)=>{
         console.log(err);
