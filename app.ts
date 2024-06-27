@@ -45,7 +45,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: mongoStore,
-    cookie: { secure: true }
+    cookie: { secure: true, domain: process.env.UI_DOMAIN }
 }))
 
 
