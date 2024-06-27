@@ -31,10 +31,9 @@ const mongoStore = new MongoDBStore({
 });
 
 app.use(cors({
-    origin: true,
+    origin: process.env.UI_DOMAIN,
     credentials: true
 }))
-app.options('*', cors())
 
 app.use(helmet());
 

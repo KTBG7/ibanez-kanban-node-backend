@@ -17,7 +17,7 @@ var mongoStore = new MongoDBStore({
     collection: "sessions"
 });
 app.use(cors({
-    origin: [process.env.UI_DOMAIN],
+    origin: process.env.UI_DOMAIN,
     credentials: true
 }));
 app.use(helmet());
