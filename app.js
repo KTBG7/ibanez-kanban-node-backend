@@ -29,7 +29,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: mongoStore,
-    cookie: { secure: true, domain: process.env.UI_DOMAIN, sameSite: "none", path: "/" }
+    cookie: { secure: true, domain: process.env.UI_DOMAIN, sameSite: "none", path: "/", httpOnly: true }
 }));
 app.use(authRoutes);
 app.use(userRoutes);
