@@ -84,7 +84,7 @@ const signup = (req:any, res: Response, next) =>{
                     res.statusMessage = "User has been created.";
                     req.session.user = req.body.email;
                     req.session.isLoggedIn = true;
-                    return responseBodyBuilder(res, req, req.session.user);
+                    return responseBodyBuilder(res, req);
                 });
         })
 

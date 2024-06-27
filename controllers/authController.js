@@ -127,7 +127,7 @@ var signup = function (req, res, next) {
             res.statusMessage = "User has been created.";
             req.session.user = req.body.email;
             req.session.isLoggedIn = true;
-            return (0, helperFunctions_1.responseBodyBuilder)(res, req, req.session.user);
+            return (0, helperFunctions_1.responseBodyBuilder)(res, req);
         });
     });
 };
