@@ -45,7 +45,7 @@ var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0,
         if (req.session.user && req.session.isLoggedIn) {
             res.statusCode = 200;
             res.statusMessage = "User has logged in.";
-            return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req, req.session.user)];
+            return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
         }
         User.findOne({ email: req.body.email })
             .then(function (user) {
@@ -57,24 +57,19 @@ var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0,
             bcrypt.compare(req.body.password, user.password)
                 .then(function (validPassword) { return __awaiter(void 0, void 0, void 0, function () {
                 return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (!validPassword) {
-                                res.statusCode = 401;
-                                res.statusMessage = "Incorrect password, please try again.";
-                                return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res)];
-                            }
-                            req.session.isLoggedIn = true;
-                            req.session.user = req.body.email;
-                            res.statusCode = 200;
-                            res.statusMessage = "User Logged In.";
-                            return [4 /*yield*/, (0, helperFunctions_1.responseBodyBuilder)(res, req, req.session.user)];
-                        case 1:
-                            _a.sent();
-                            return [2 /*return*/, req.session.save(function (err) {
-                                    console.log(err);
-                                })];
+                    if (!validPassword) {
+                        res.statusCode = 401;
+                        res.statusMessage = "Incorrect password, please try again.";
+                        return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res)];
                     }
+                    req.session.isLoggedIn = true;
+                    req.session.user = req.body.email;
+                    res.statusCode = 200;
+                    res.statusMessage = "User Logged In.";
+                    req.session.save(function (err) {
+                        console.log(err);
+                    });
+                    return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
                 });
             }); })
                 .catch(function (err) {

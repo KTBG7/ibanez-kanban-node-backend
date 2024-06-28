@@ -10,7 +10,7 @@ const login = async (req: any, res: Response, next) =>{
     if(req.session.user && req.session.isLoggedIn){
         res.statusCode = 200;
         res.statusMessage = "User has logged in."
-        return responseBodyBuilder(res, req, req.session.user);
+        return responseBodyBuilder(res, req);
     }
     User.findOne({email: req.body.email})
         .then((user)=>{
@@ -30,10 +30,10 @@ const login = async (req: any, res: Response, next) =>{
                     req.session.user = req.body.email;
                     res.statusCode = 200;
                     res.statusMessage = "User Logged In.";
-                    await responseBodyBuilder(res, req, req.session.user)
-                    return req.session.save(err => {
+                    req.session.save(err => {
                         console.log(err);
                     })
+                    return responseBodyBuilder(res, req)
                 })
                 .catch((err)=>{
                     res.statusCode = 503;
