@@ -6,7 +6,7 @@ import {responseBodyBuilder} from "../utils/helperFunctions";
 const User: Model<UserType> = model('User', require('../models/user'));
 
 const getUserBoards = async (req: any, res: Response, next)=>{
-        return User.findOne({email: req.body.email})
+        return User.findOne({email: req.headers['email']})
             .then((user)=>{
                 res.statusCode = 200;
                 res.statusMessage = "User Boards found successfully";
