@@ -49,29 +49,28 @@ var login = function (req, res, next) {
     }
     return User.findOne({ email: req.body.email })
         .then(function (user) {
+        console.log(user);
         if (!user) {
             res.statusCode = 404;
             res.statusMessage = "Email is not registered, please try a different email or sign up.";
             return (0, helperFunctions_1.responseBodyBuilder)(res);
         }
         bcrypt.compare(req.body.password, user.password)
-            .then(function (validPassword) { return __awaiter(void 0, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                if (!validPassword) {
-                    res.statusCode = 401;
-                    res.statusMessage = "Incorrect password, please try again.";
-                    return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res)];
-                }
-                req.session.isLoggedIn = true;
-                req.session.user = req.body.email;
-                res.statusCode = 200;
-                res.statusMessage = "User Logged In.";
-                req.session.save(function (err) {
-                    console.log(err);
-                });
-                return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
+            .then(function (validPassword) {
+            if (!validPassword) {
+                res.statusCode = 401;
+                res.statusMessage = "Incorrect password, please try again.";
+                return (0, helperFunctions_1.responseBodyBuilder)(res);
+            }
+            req.session.isLoggedIn = true;
+            req.session.user = req.body.email;
+            res.statusCode = 200;
+            res.statusMessage = "User Logged In.";
+            (0, helperFunctions_1.responseBodyBuilder)(res, req);
+            return req.session.save(function (err) {
+                console.log(err);
             });
-        }); })
+        })
             .catch(function (err) {
             res.statusCode = 503;
             res.statusMessage = "There has been an error please retry.";

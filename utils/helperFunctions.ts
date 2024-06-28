@@ -8,7 +8,7 @@ export const destroySession = (req)=>{
     });
 }
 
-export const responseBodyBuilder = async (res: Response, req?: any, boards?: BoardType[])=>{
+export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType[])=>{
     if(req){
         const token = generateToken(req, res)
         return res.send({

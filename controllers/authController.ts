@@ -15,13 +15,14 @@ const login = (req: any, res: Response, next) =>{
     }
     return User.findOne({email: req.body.email})
         .then((user)=>{
+            console.log(user);
             if(!user){
                 res.statusCode = 404;
                 res.statusMessage = "Email is not registered, please try a different email or sign up.";
                 return responseBodyBuilder(res);
             }
             bcrypt.compare(req.body.password, user.password)
-                .then(async (validPassword) => {
+                .then((validPassword) => {
                     if (!validPassword) {
                         res.statusCode = 401;
                         res.statusMessage = "Incorrect password, please try again.";
@@ -31,10 +32,10 @@ const login = (req: any, res: Response, next) =>{
                     req.session.user = req.body.email;
                     res.statusCode = 200;
                     res.statusMessage = "User Logged In.";
-                    req.session.save(err => {
+                    responseBodyBuilder(res, req)
+                    return req.session.save(err => {
                         console.log(err);
                     })
-                    return responseBodyBuilder(res, req)
                 })
                 .catch((err)=>{
                     res.statusCode = 503;
