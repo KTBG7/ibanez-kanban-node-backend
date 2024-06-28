@@ -52,7 +52,7 @@ var responseBodyBuilder = function (res, req, boards) { return __awaiter(void 0,
             return [2 /*return*/, res.send({
                     statusCode: res.statusCode,
                     statusMessage: res.statusMessage,
-                    user: token
+                    csrf: token
                 })];
         }
         if (boards) {
