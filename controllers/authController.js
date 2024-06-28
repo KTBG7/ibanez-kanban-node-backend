@@ -111,14 +111,13 @@ var signup = function (req, res, next) {
                         ]
                     }
                 ] });
-            return user.save();
-        })
-            .then(function () {
-            res.statusCode = 200;
-            res.statusMessage = "User has been created.";
-            req.session.user = req.body.email;
-            req.session.isLoggedIn = true;
-            return (0, helperFunctions_1.responseBodyBuilder)(res, req);
+            user.save().then(function () {
+                res.statusCode = 200;
+                res.statusMessage = "User has been created.";
+                req.session.user = req.body.email;
+                req.session.isLoggedIn = true;
+                return (0, helperFunctions_1.responseBodyBuilder)(res, req);
+            });
         });
     });
 };

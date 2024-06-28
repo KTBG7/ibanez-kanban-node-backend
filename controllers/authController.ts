@@ -78,15 +78,14 @@ const signup = (req:any, res: Response, next) =>{
                                 }
                             ]
                         }]});
-                return user.save();
-            })
-                .then(()=>{
+                user.save().then(()=>{
                     res.statusCode = 200;
                     res.statusMessage = "User has been created.";
                     req.session.user = req.body.email;
                     req.session.isLoggedIn = true;
                     return responseBodyBuilder(res, req);
                 });
+            })
         })
 
 }
