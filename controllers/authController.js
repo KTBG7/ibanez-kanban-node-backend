@@ -41,7 +41,6 @@ var helperFunctions_1 = require("../utils/helperFunctions");
 var User = (0, mongoose_1.model)('User', require('../models/user'));
 var bcrypt = require('bcryptjs');
 var login = function (req, res, next) {
-    console.log(req.session.user, req.session.isLoggedIn);
     if (req.session.user && req.session.isLoggedIn) {
         res.statusCode = 200;
         res.statusMessage = "User has logged in.";

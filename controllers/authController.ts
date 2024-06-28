@@ -7,7 +7,6 @@ const User: Model<UserType> = model('User', require('../models/user'));
 const bcrypt = require('bcryptjs');
 
 const login = (req: any, res: Response, next) =>{
-    console.log(req.session.user, req.session.isLoggedIn)
     if(req.session.user && req.session.isLoggedIn){
         res.statusCode = 200;
         res.statusMessage = "User has logged in."
