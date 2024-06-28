@@ -6,8 +6,7 @@ import {responseBodyBuilder} from "../utils/helperFunctions";
 const User: Model<UserType> = model('User', require('../models/user'));
 
 const getUserBoards = async (req: any, res: Response, next)=>{
-        console.log(req.session);
-        console.log(req.cookies);
+        console.log(req.session.user, 'checking for email');
         return User.findOne({email: req.session.user})
             .then((user)=>{
                 res.statusCode = 200;
