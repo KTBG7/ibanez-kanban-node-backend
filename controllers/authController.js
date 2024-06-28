@@ -49,7 +49,7 @@ var login = function (req, res, next) {
     }
     return User.findOne({ email: req.body.email })
         .then(function (user) {
-        console.log(user);
+        console.log(user, "user");
         if (!user) {
             res.statusCode = 404;
             res.statusMessage = "Email is not registered, please try a different email or sign up.";

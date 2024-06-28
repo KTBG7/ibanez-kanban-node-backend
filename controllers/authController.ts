@@ -15,7 +15,7 @@ const login = (req: any, res: Response, next) =>{
     }
     return User.findOne({email: req.body.email})
         .then((user)=>{
-            console.log(user);
+            console.log(user, "user");
             if(!user){
                 res.statusCode = 404;
                 res.statusMessage = "Email is not registered, please try a different email or sign up.";
