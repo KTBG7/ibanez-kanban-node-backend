@@ -6,8 +6,7 @@ import {responseBodyBuilder} from "../utils/helperFunctions";
 const User: Model<UserType> = model('User', require('../models/user'));
 
 const getUserBoards = async (req: any, res: Response, next)=>{
-        console.log(req.session.user, 'checking for email');
-        return User.findOne({email: req.session.user})
+        return User.findOne({email: req.body.email})
             .then((user)=>{
                 res.statusCode = 200;
                 res.statusMessage = "User Boards found successfully";
@@ -22,7 +21,7 @@ const getUserBoards = async (req: any, res: Response, next)=>{
 }
 
 const postUserBoards = async (req:any, res: Response, next)=>{
-    return User.findOne({email: req.session.user})
+    return User.findOne({email: req.body.email})
         .then((user)=>{
             if(!user){
                 res.statusCode = 404;

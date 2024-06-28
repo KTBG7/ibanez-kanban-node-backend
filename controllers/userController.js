@@ -41,8 +41,7 @@ var helperFunctions_1 = require("../utils/helperFunctions");
 var User = (0, mongoose_1.model)('User', require('../models/user'));
 var getUserBoards = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        console.log(req.session.user, 'checking for email');
-        return [2 /*return*/, User.findOne({ email: req.session.user })
+        return [2 /*return*/, User.findOne({ email: req.body.email })
                 .then(function (user) {
                 res.statusCode = 200;
                 res.statusMessage = "User Boards found successfully";
@@ -58,7 +57,7 @@ var getUserBoards = function (req, res, next) { return __awaiter(void 0, void 0,
 }); };
 var postUserBoards = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2 /*return*/, User.findOne({ email: req.session.user })
+        return [2 /*return*/, User.findOne({ email: req.body.email })
                 .then(function (user) {
                 if (!user) {
                     res.statusCode = 404;
