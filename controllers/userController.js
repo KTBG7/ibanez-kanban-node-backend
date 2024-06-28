@@ -41,6 +41,8 @@ var helperFunctions_1 = require("../utils/helperFunctions");
 var User = (0, mongoose_1.model)('User', require('../models/user'));
 var getUserBoards = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
+        console.log(req.session);
+        console.log(req.cookies);
         return [2 /*return*/, User.findOne({ email: req.session.user })
                 .then(function (user) {
                 res.statusCode = 200;
