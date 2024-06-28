@@ -6,13 +6,14 @@ import {destroySession, responseBodyBuilder} from "../utils/helperFunctions";
 const User: Model<UserType> = model('User', require('../models/user'));
 const bcrypt = require('bcryptjs');
 
-const login = async (req: any, res: Response, next) =>{
+const login = (req: any, res: Response, next) =>{
+    console.log(req.session.user, req.session.isLoggedIn)
     if(req.session.user && req.session.isLoggedIn){
         res.statusCode = 200;
         res.statusMessage = "User has logged in."
         return responseBodyBuilder(res, req);
     }
-    User.findOne({email: req.body.email})
+    return User.findOne({email: req.body.email})
         .then((user)=>{
             if(!user){
                 res.statusCode = 404;
