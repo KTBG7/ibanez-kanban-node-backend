@@ -14,7 +14,7 @@ export const responseBodyBuilder = async (res: Response, req?: any, boards?: Boa
         return res.send({
             statusCode: res.statusCode,
             statusMessage: res.statusMessage,
-            user: token
+            csrf: token
         })
     }
     if(boards){
