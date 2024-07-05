@@ -20,7 +20,6 @@ app.use(cors({
     origin: process.env.UI_DOMAIN,
     credentials: true
 }));
-app.use(helmet());
 app.use(cookieParser(secret));
 app.use(bParser.json());
 app.use(bParser.urlencoded({ extended: false }));

@@ -35,8 +35,6 @@ app.use(cors({
     credentials: true
 }))
 
-app.use(helmet());
-
 app.use(cookieParser(secret));
 app.use(bParser.json());
 app.use(bParser.urlencoded({extended: false}));
