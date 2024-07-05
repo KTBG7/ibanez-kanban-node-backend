@@ -32,6 +32,7 @@ app.use(session({
     store: mongoStore,
     cookie: { sameSite: "none", path: "/", httpOnly: true, secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 }
 }));
+app.set('mongoStore', mongoStore);
 app.use(authRoutes);
 app.use(userRoutes);
 mongoose.connect(process.env.MONGODB_SECRET).then(function (res) {
