@@ -9,6 +9,7 @@ export const destroySession = (req)=>{
 }
 
 export const findSession = (sessionToken, req)=>{
+    console.log(req.app.get('mongoStore').all());
     return req.app.get('mongoStore').get(sessionToken, (err, session)=>{
         if(err){
             return false;
