@@ -41,42 +41,66 @@ var helperFunctions_1 = require("../utils/helperFunctions");
 var User = (0, mongoose_1.model)('User', require('../models/user'));
 var getUserBoards = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2 /*return*/, User.findOne({ email: req.headers['email'] })
-                .then(function (user) {
-                res.statusCode = 200;
-                res.statusMessage = "User Boards found successfully";
-                return (0, helperFunctions_1.responseBodyBuilder)(res, null, user.boards);
-            })
-                .catch(function (err) {
-                console.log("There has been an error contacting the DB: ", err);
-                res.statusCode = 503;
-                res.statusMessage = "Downstream Error";
-                return (0, helperFunctions_1.responseBodyBuilder)(res);
-            })];
+        switch (_a.label) {
+            case 0:
+                if (!(!req.session.user || !req.session.isLoggedIn)) return [3 /*break*/, 3];
+                res.statusCode = 401;
+                res.statusMessage = 'User is not authenticated';
+                if (!req.session.user) return [3 /*break*/, 2];
+                return [4 /*yield*/, (0, helperFunctions_1.destroySession)(req)];
+            case 1:
+                _a.sent();
+                _a.label = 2;
+            case 2: return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res)];
+            case 3: return [2 /*return*/, User.findOne({ email: req.session.user })
+                    .then(function (user) {
+                    res.statusCode = 200;
+                    res.statusMessage = "User Boards found successfully";
+                    return (0, helperFunctions_1.responseBodyBuilder)(res, null, user.boards);
+                })
+                    .catch(function (err) {
+                    console.log("There has been an error contacting the DB: ", err);
+                    res.statusCode = 503;
+                    res.statusMessage = "Downstream Error";
+                    return (0, helperFunctions_1.responseBodyBuilder)(res);
+                })];
+        }
     });
 }); };
 var postUserBoards = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2 /*return*/, User.findOne({ email: req.body.email })
-                .then(function (user) {
-                if (!user) {
-                    res.statusCode = 404;
-                    res.statusMessage = "User not found.";
-                    return (0, helperFunctions_1.responseBodyBuilder)(res);
-                }
-                if (Array.isArray(req.body.boards)) {
-                    user.boards = req.body.boards;
-                    return user.save().then(function () {
-                        res.statusCode = 200;
-                        res.statusMessage = "User boards have been updated";
+        switch (_a.label) {
+            case 0:
+                if (!(!req.session.user || !req.session.isLoggedIn)) return [3 /*break*/, 3];
+                res.statusCode = 401;
+                res.statusMessage = 'User is not authenticated';
+                if (!req.session.user) return [3 /*break*/, 2];
+                return [4 /*yield*/, (0, helperFunctions_1.destroySession)(req)];
+            case 1:
+                _a.sent();
+                _a.label = 2;
+            case 2: return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res)];
+            case 3: return [2 /*return*/, User.findOne({ email: req.session.user })
+                    .then(function (user) {
+                    if (!user) {
+                        res.statusCode = 404;
+                        res.statusMessage = "User not found.";
                         return (0, helperFunctions_1.responseBodyBuilder)(res);
-                    }).catch(function (err) {
-                        res.statusCode = 500;
-                        res.statusMessage = "User boards have not been updated, DB issue." + err;
-                        return (0, helperFunctions_1.responseBodyBuilder)(res);
-                    });
-                }
-            })];
+                    }
+                    if (Array.isArray(req.body.boards)) {
+                        user.boards = req.body.boards;
+                        return user.save().then(function () {
+                            res.statusCode = 200;
+                            res.statusMessage = "User boards have been updated";
+                            return (0, helperFunctions_1.responseBodyBuilder)(res);
+                        }).catch(function (err) {
+                            res.statusCode = 500;
+                            res.statusMessage = "User boards have not been updated, DB issue." + err;
+                            return (0, helperFunctions_1.responseBodyBuilder)(res);
+                        });
+                    }
+                })];
+        }
     });
 }); };
 module.exports = {

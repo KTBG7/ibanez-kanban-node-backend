@@ -1,12 +1,20 @@
 import { Response } from "express";
 import {model, Model} from "mongoose";
 import {UserType} from "../types/GlobalTypes";
-import {responseBodyBuilder} from "../utils/helperFunctions";
+import {destroySession, responseBodyBuilder} from "../utils/helperFunctions";
 
 const User: Model<UserType> = model('User', require('../models/user'));
 
 const getUserBoards = async (req: any, res: Response, next)=>{
-        return User.findOne({email: req.headers['email']})
+        if(!req.session.user || !req.session.isLoggedIn){
+            res.statusCode = 401;
+            res.statusMessage = 'User is not authenticated';
+            if(req.session.user){
+                await destroySession(req)
+            }
+            return responseBodyBuilder(res)
+        }
+        return User.findOne({email: req.session.user})
             .then((user)=>{
                 res.statusCode = 200;
                 res.statusMessage = "User Boards found successfully";
@@ -21,7 +29,15 @@ const getUserBoards = async (req: any, res: Response, next)=>{
 }
 
 const postUserBoards = async (req:any, res: Response, next)=>{
-    return User.findOne({email: req.body.email})
+    if(!req.session.user || !req.session.isLoggedIn){
+        res.statusCode = 401;
+        res.statusMessage = 'User is not authenticated';
+        if(req.session.user){
+            await destroySession(req)
+        }
+        return responseBodyBuilder(res)
+    }
+    return User.findOne({email: req.session.user})
         .then((user)=>{
             if(!user){
                 res.statusCode = 404;

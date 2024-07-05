@@ -6,7 +6,7 @@ import {destroySession, responseBodyBuilder} from "../utils/helperFunctions";
 const User: Model<UserType> = model('User', require('../models/user'));
 const bcrypt = require('bcryptjs');
 
-const login = (req: any, res: Response, next) =>{
+const login = async (req: any, res: Response, next) =>{
     if(req.session.user && req.session.isLoggedIn){
         res.statusCode = 200;
         res.statusMessage = "User has logged in."
@@ -14,14 +14,13 @@ const login = (req: any, res: Response, next) =>{
     }
     return User.findOne({email: req.body.email})
         .then((user)=>{
-            console.log(user, "user");
             if(!user){
                 res.statusCode = 404;
                 res.statusMessage = "Email is not registered, please try a different email or sign up.";
                 return responseBodyBuilder(res);
             }
             bcrypt.compare(req.body.password, user.password)
-                .then((validPassword) => {
+                .then(async (validPassword) => {
                     if (!validPassword) {
                         res.statusCode = 401;
                         res.statusMessage = "Incorrect password, please try again.";
@@ -31,10 +30,10 @@ const login = (req: any, res: Response, next) =>{
                     req.session.user = req.body.email;
                     res.statusCode = 200;
                     res.statusMessage = "User Logged In.";
-                    responseBodyBuilder(res, req)
-                    return req.session.save(err => {
+                    await req.session.save(err => {
                         console.log(err);
-                    })
+                    });
+                    return responseBodyBuilder(res, req)
                 })
                 .catch((err)=>{
                     res.statusCode = 503;
@@ -78,11 +77,14 @@ const signup = (req:any, res: Response, next) =>{
                                 }
                             ]
                         }]});
-                user.save().then(()=>{
+                user.save().then(async ()=>{
                     res.statusCode = 200;
                     res.statusMessage = "User has been created.";
                     req.session.user = req.body.email;
                     req.session.isLoggedIn = true;
+                    await req.session.save(err => {
+                        console.log(err);
+                    });
                     return responseBodyBuilder(res, req);
                 });
             })
