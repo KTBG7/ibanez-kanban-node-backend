@@ -8,8 +8,8 @@ export const destroySession = (req)=>{
     });
 }
 
-export const findSession = (sessionToken)=>{
-    return app.get('session').store.get(sessionToken, (err, session)=>{
+export const findSession = (sessionToken, req)=>{
+    return req.session.store.get(sessionToken, (err, session)=>{
         if(err){
             return false;
         }

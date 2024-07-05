@@ -8,8 +8,8 @@ var destroySession = function (req) {
     });
 };
 exports.destroySession = destroySession;
-var findSession = function (sessionToken) {
-    return app.get('session').store.get(sessionToken, function (err, session) {
+var findSession = function (sessionToken, req) {
+    return req.session.store.get(sessionToken, function (err, session) {
         if (err) {
             return false;
         }

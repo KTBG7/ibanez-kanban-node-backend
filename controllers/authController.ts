@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs');
 const login = async (req: any, res: Response, next) =>{
     console.log(req.headers['kanban_user'])
     if(req.headers['kanban_user']){
-        const session  = await findSession(req.headers['kanban_user']);
+        const session  = await findSession(req.headers['kanban_user'], req);
         console.log(session)
         if(session) {
             req.session = session;
