@@ -47,7 +47,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: mongoStore,
-    cookie: { sameSite: "none", path: "/", httpOnly: false, secure: false, maxAge: 30 * 24 * 60 * 60 * 1000 }
+    cookie: { domain: "ibanezkanban.com", sameSite: "lax", path: "/", httpOnly: false, secure: false, maxAge: 30 * 24 * 60 * 60 * 1000 }
 }))
 
 
