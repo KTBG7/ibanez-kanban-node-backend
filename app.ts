@@ -30,6 +30,8 @@ const mongoStore = new MongoDBStore({
     collection: "sessions"
 });
 
+app.set('trust proxy', 1);
+
 app.use(cors({
     origin: process.env.UI_DOMAIN,
     credentials: true
