@@ -25,7 +25,8 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
         return res.send({
             statusCode: res.statusCode,
             statusMessage: res.statusMessage,
-            csrf: token
+            csrf: token,
+            kanban_user: req.sessionID
         })
     }
     if(boards){
@@ -37,6 +38,7 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
     }
     return res.send({
         statusCode: res.statusCode,
-        statusMessage: res.statusMessage
+        statusMessage: res.statusMessage,
+
     })
 }

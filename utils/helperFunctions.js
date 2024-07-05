@@ -25,7 +25,8 @@ var responseBodyBuilder = function (res, req, boards) {
         return res.send({
             statusCode: res.statusCode,
             statusMessage: res.statusMessage,
-            csrf: token
+            csrf: token,
+            kanban_user: req.sessionID
         });
     }
     if (boards) {
@@ -37,7 +38,7 @@ var responseBodyBuilder = function (res, req, boards) {
     }
     return res.send({
         statusCode: res.statusCode,
-        statusMessage: res.statusMessage
+        statusMessage: res.statusMessage,
     });
 };
 exports.responseBodyBuilder = responseBodyBuilder;
