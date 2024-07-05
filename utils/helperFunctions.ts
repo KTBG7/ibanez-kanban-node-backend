@@ -8,6 +8,17 @@ export const destroySession = (req)=>{
     });
 }
 
+export const findSession = (sessionToken)=>{
+    return mongoStore.get(sessionToken, (err, session)=>{
+        if(err){
+            return false;
+        }
+        if(session){
+            return session;
+        }
+    })
+}
+
 export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType[])=>{
     if(req){
         const token = generateToken(req, res)

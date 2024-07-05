@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.responseBodyBuilder = exports.destroySession = void 0;
+exports.responseBodyBuilder = exports.findSession = exports.destroySession = void 0;
 var generateToken = require('../utils/CsrfUtil').generateToken;
 var destroySession = function (req) {
     return req.session.destroy(function (err) {
@@ -8,6 +8,17 @@ var destroySession = function (req) {
     });
 };
 exports.destroySession = destroySession;
+var findSession = function (sessionToken) {
+    return mongoStore.get(sessionToken, function (err, session) {
+        if (err) {
+            return false;
+        }
+        if (session) {
+            return session;
+        }
+    });
+};
+exports.findSession = findSession;
 var responseBodyBuilder = function (res, req, boards) {
     if (req) {
         var token = generateToken(req, res);
