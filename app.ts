@@ -30,8 +30,6 @@ const mongoStore = new MongoDBStore({
     collection: "sessions"
 });
 
-app.set('trust proxy', 1)
-
 app.use(cors({
     origin: process.env.UI_DOMAIN,
     credentials: true
@@ -46,7 +44,7 @@ app.use(session({
     saveUninitialized: false,
     store: mongoStore,
     trustProxy: true,
-    cookie: { domain: process.env.UI_DOMAIN, sameSite: "none", path: "/", httpOnly: false, secure: false, maxAge: 30 * 24 * 60 * 60 * 1000 }
+    cookie: { domain: process.env.UI_DOMAIN, sameSite: "none", path: "/", secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 }
 }))
 
 
