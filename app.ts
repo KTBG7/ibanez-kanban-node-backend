@@ -43,7 +43,6 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: mongoStore,
-    trustProxy: true,
     cookie: { sameSite: "none", path: "/", secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 }
 }))
 
