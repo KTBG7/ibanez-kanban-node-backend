@@ -6,25 +6,14 @@ import {destroySession, findSession, responseBodyBuilder} from "../utils/helperF
 const User: Model<UserType> = model('User', require('../models/user'));
 
 const getUserBoards = async (req: any, res: Response, next)=>{
-    if(req.headers['kanban_user']){
-        const session  = await findSession(req.headers['kanban_user']);
-        if(session) {
-            req.session = session;
-            res.statusCode = 200;
-            res.statusMessage = "User has logged in."
-            return responseBodyBuilder(res, req);
+    if(!req.session.user || !req.session.isLoggedIn){
+        res.statusCode = 401;
+        res.statusMessage = 'User is not authenticated';
+        if(req.session.user){
+            await destroySession(req)
         }
-        res.statusCode = 210;
-        res.statusMessage = "Session Expired, please log in again!";
-        return responseBodyBuilder(res);
-    }else if(!req.session.user || !req.session.isLoggedIn){
-            res.statusCode = 401;
-            res.statusMessage = 'User is not authenticated';
-            if(req.session.user){
-                await destroySession(req)
-            }
-            return responseBodyBuilder(res)
-        }
+        return responseBodyBuilder(res)
+    }
         return User.findOne({email: req.session.user})
             .then((user)=>{
                 res.statusCode = 200;

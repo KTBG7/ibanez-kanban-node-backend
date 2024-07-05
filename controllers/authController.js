@@ -45,10 +45,12 @@ var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0,
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                console.log(req.headers['kanban_user']);
                 if (!req.headers['kanban_user']) return [3 /*break*/, 2];
                 return [4 /*yield*/, (0, helperFunctions_1.findSession)(req.headers['kanban_user'])];
             case 1:
                 session_1 = _a.sent();
+                console.log(session_1);
                 if (session_1) {
                     req.session = session_1;
                     res.statusCode = 200;

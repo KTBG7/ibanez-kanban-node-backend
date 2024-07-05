@@ -7,8 +7,10 @@ const User: Model<UserType> = model('User', require('../models/user'));
 const bcrypt = require('bcryptjs');
 
 const login = async (req: any, res: Response, next) =>{
+    console.log(req.headers['kanban_user'])
     if(req.headers['kanban_user']){
         const session  = await findSession(req.headers['kanban_user']);
+        console.log(session)
         if(session) {
             req.session = session;
             res.statusCode = 200;
