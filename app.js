@@ -16,7 +16,6 @@ var mongoStore = new MongoDBStore({
     uri: process.env.MONGODB_SECRET,
     collection: "sessions"
 });
-app.set('trust proxy', 1);
 app.use(cors({
     origin: process.env.UI_DOMAIN,
     credentials: true
