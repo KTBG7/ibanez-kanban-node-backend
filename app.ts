@@ -45,7 +45,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: mongoStore,
-    proxy: true,
+    trustProxy: true,
     cookie: { domain: process.env.UI_DOMAIN, sameSite: "lax", path: "/", httpOnly: false, secure: false, maxAge: 30 * 24 * 60 * 60 * 1000 }
 }))
 
