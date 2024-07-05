@@ -9,7 +9,7 @@ export const destroySession = (req)=>{
 }
 
 export const findSession = (sessionToken)=>{
-    return mongoStore.get(sessionToken, (err, session)=>{
+    return app.get('session').store.get(sessionToken, (err, session)=>{
         if(err){
             return false;
         }

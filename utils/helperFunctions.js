@@ -9,7 +9,7 @@ var destroySession = function (req) {
 };
 exports.destroySession = destroySession;
 var findSession = function (sessionToken) {
-    return mongoStore.get(sessionToken, function (err, session) {
+    return app.get('session').store.get(sessionToken, function (err, session) {
         if (err) {
             return false;
         }
