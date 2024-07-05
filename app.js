@@ -29,7 +29,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: mongoStore,
-    cookie: { domain: "ibanezkanban.com", sameSite: "lax", path: "/", httpOnly: false, secure: false, maxAge: 30 * 24 * 60 * 60 * 1000 }
+    proxy: true,
+    cookie: { domain: process.env.UI_DOMAIN, sameSite: "lax", path: "/", httpOnly: false, secure: false, maxAge: 30 * 24 * 60 * 60 * 1000 }
 }));
 app.use(authRoutes);
 app.use(userRoutes);
