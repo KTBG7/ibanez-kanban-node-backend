@@ -9,7 +9,10 @@ const defaultDestroyCallback = (err)=>{
         console.log('Success destroying session')
     }
 }
-export const destroySession = (req, sessionId, callback = defaultDestroyCallback)=>{
+export const destroySession = (req, sessionId, callback?)=>{
+    if(!callback){
+        return req.session.destroy(sessionId, defaultDestroyCallback)
+    }
     return req.session.destroy(sessionId, callback);
 }
 
@@ -41,7 +44,10 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
 
 export const findSession = (req, res, next)=>{
         const sessionToken = req.headers['kanban_user'];
-        if (!sessionToken) next();
+        if (sessionToken.length < 1) {
+            console.log("Empty User ID");
+            next()
+        }
         if(sessionToken === req.sessionID){
             console.log('equal')
             next()
@@ -59,7 +65,7 @@ export const findSession = (req, res, next)=>{
                     req.session.isLoggedIn = session.isLoggedIn;
                     req.session.user = session.user;
                 }
-                return destroySession(session.id, (err) => {
+                return req.session.destroy(session.id, (err) => {
                     if (err) {
                         console.log("Couldn't destroy old session");
                         next();
