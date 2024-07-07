@@ -98,8 +98,14 @@ var findSession = function (req, res, next) { return __awaiter(void 0, void 0, v
                 return (0, exports.responseBodyBuilder)(res);
             }
             if (!!session) {
-                console.log('Session found', session);
-                console.log(req.session, 'Request session debug');
+                req.sessionStore.destroy(session.id, function (err) {
+                    if (err) {
+                        console.log('There was an error destroying old session');
+                    }
+                    else {
+                        console.log('Old Session destroyed!');
+                    }
+                });
                 next();
             }
         });

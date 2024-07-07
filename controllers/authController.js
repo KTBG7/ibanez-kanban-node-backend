@@ -42,6 +42,7 @@ var User = (0, mongoose_1.model)('User', require('../models/user'));
 var bcrypt = require('bcryptjs');
 var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
+        console.log(req.session, "Login LOGGER");
         if (req.session.user && req.session.isLoggedIn) {
             res.statusCode = 220;
             res.statusMessage = "User has an active session, redirecting to kanban.";

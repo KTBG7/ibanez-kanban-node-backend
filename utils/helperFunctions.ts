@@ -61,8 +61,13 @@ export const findSession = async (req, res, next: NextFunction)=>{
                 return responseBodyBuilder(res);
             }
             if (!!session) {
-                console.log('Session found', session);
-                console.log(req.session, 'Request session debug');
+                req.sessionStore.destroy(session.id, (err)=>{
+                    if(err){
+                        console.log('There was an error destroying old session');
+                    }else{
+                        console.log('Old Session destroyed!')
+                    }
+                });
                 next();
             }
         });
