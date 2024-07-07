@@ -39,6 +39,15 @@ export const findSession = async (sessionToken, req)=>{
 }
 
 export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType[])=>{
+    if(boards && req){
+        const token = generateToken(req, res)
+        return res.send({
+            statusCode: res.statusCode,
+            statusMessage: res.statusMessage,
+            boards: boards,
+            csrf: token
+        })
+    }
     if(req){
         const token = generateToken(req, res)
         return res.send({
@@ -46,13 +55,6 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
             statusMessage: res.statusMessage,
             csrf: token,
             kanban_user: req.sessionID
-        })
-    }
-    if(boards){
-        return res.send({
-            statusCode: res.statusCode,
-            statusMessage: res.statusMessage,
-            boards: boards
         })
     }
     return res.send({

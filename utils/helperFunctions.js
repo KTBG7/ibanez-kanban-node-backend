@@ -89,6 +89,15 @@ var findSession = function (sessionToken, req) { return __awaiter(void 0, void 0
 }); };
 exports.findSession = findSession;
 var responseBodyBuilder = function (res, req, boards) {
+    if (boards && req) {
+        var token = generateToken(req, res);
+        return res.send({
+            statusCode: res.statusCode,
+            statusMessage: res.statusMessage,
+            boards: boards,
+            csrf: token
+        });
+    }
     if (req) {
         var token = generateToken(req, res);
         return res.send({
@@ -96,13 +105,6 @@ var responseBodyBuilder = function (res, req, boards) {
             statusMessage: res.statusMessage,
             csrf: token,
             kanban_user: req.sessionID
-        });
-    }
-    if (boards) {
-        return res.send({
-            statusCode: res.statusCode,
-            statusMessage: res.statusMessage,
-            boards: boards
         });
     }
     return res.send({

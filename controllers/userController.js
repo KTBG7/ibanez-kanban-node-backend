@@ -48,7 +48,7 @@ var getUserBoards = function (req, res, next) { return __awaiter(void 0, void 0,
                             .then(function (user) {
                             res.statusCode = 200;
                             res.statusMessage = "User Boards found successfully";
-                            return (0, helperFunctions_1.responseBodyBuilder)(res, null, user.boards);
+                            return (0, helperFunctions_1.responseBodyBuilder)(res, req, user.boards);
                         })
                             .catch(function (err) {
                             console.log("There has been an error contacting the DB: ", err);

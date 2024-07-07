@@ -11,7 +11,7 @@ const getUserBoards = async (req: any, res: Response, next)=>{
             .then((user)=>{
                 res.statusCode = 200;
                 res.statusMessage = "User Boards found successfully";
-                return responseBodyBuilder(res, null, user.boards);
+                return responseBodyBuilder(res, req, user.boards);
             })
             .catch((err)=>{
                 console.log("There has been an error contacting the DB: ", err);
