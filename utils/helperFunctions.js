@@ -47,7 +47,6 @@ var findSession = function (req, res, next) {
         return next();
     }
     req.sessionStore.load(req.headers['kanban_user'], function (err, session) {
-        console.log('OLD SESSION', session);
         if (!req.headers['kanban_user'] || req.headers['kanban_user'].length < 1) {
             return next();
         }
@@ -69,7 +68,6 @@ var findSession = function (req, res, next) {
                 }
                 else {
                     console.log('Old Session destroyed!');
-                    console.log('Current session', req.session);
                 }
                 return next();
             });
