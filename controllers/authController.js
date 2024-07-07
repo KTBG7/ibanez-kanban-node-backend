@@ -41,6 +41,7 @@ var helperFunctions_1 = require("../utils/helperFunctions");
 var User = (0, mongoose_1.model)('User', require('../models/user'));
 var bcrypt = require('bcryptjs');
 var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var foundSession;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -49,11 +50,10 @@ var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0,
                     res.statusMessage = "User has an active session, redirecting to kanban.";
                     return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
                 }
-                if (!(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1)) return [3 /*break*/, 4];
-                return [4 /*yield*/, (0, helperFunctions_1.findSession)(req.headers['kanban_user'], req)];
-            case 1:
-                _a.sent();
-                if (!req.session.isLoggedIn) return [3 /*break*/, 3];
+                if (!(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1)) return [3 /*break*/, 3];
+                foundSession = (0, helperFunctions_1.findSession)(req.headers['kanban_user'], req);
+                console.log(foundSession, 'test found');
+                if (!foundSession.isLoggedIn) return [3 /*break*/, 2];
                 res.statusCode = 220;
                 res.statusMessage = "User has an active session, redirecting to kanban.";
                 return [4 /*yield*/, req.session.save(function (err) {
@@ -61,14 +61,14 @@ var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0,
                             console.log('Error saving', err);
                         }
                     })];
-            case 2:
+            case 1:
                 _a.sent();
                 return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
-            case 3:
+            case 2:
                 res.statusCode = 230;
                 res.statusMessage = "User has expired token.";
                 return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res)];
-            case 4: return [2 /*return*/, User.findOne({ email: req.body.email })
+            case 3: return [2 /*return*/, User.findOne({ email: req.body.email })
                     .then(function (user) {
                     if (!user) {
                         res.statusCode = 404;

@@ -12,12 +12,12 @@ export const destroySession = (req)=>{
     });
 }
 
-export const findSession = async (sessionToken, req)=>{
+export const findSession = (sessionToken, req)=>{
         if(sessionToken === req.sessionID){
             console.log('equal')
             return true;
         }
-        return await req.sessionStore.get(sessionToken, (err, session) => {
+        return req.sessionStore.get(sessionToken, (err, session) => {
             if (err) {
                 console.log('No session found session', err)
                 return false;
@@ -25,11 +25,7 @@ export const findSession = async (sessionToken, req)=>{
             if (!!session) {
                 console.log('Session found', session)
                 if(session.isLoggedIn){
-                    console.log("New session old values:", req.session);
-                    req.session.user = session.user;
-                    req.session.isLoggedIn = session.isLoggedIn;
-                    req.session.cookie.expires = session.cookie.expires;
-                    console.log("New session new values:", req.session);
+                    return session;
                 }
                 return req.sessionStore.destroy(session.id, (err) => {
                     if (err) {
