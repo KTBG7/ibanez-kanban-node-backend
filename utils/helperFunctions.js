@@ -93,42 +93,33 @@ var findSession = function (req, res, next) { return __awaiter(void 0, void 0, v
                     next();
                 }
                 console.log(req.method, 'Made it through');
-                return [4 /*yield*/, req.sessionStore.get(sessionToken, function (err, session) { return __awaiter(void 0, void 0, void 0, function () {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    if (err) {
-                                        console.log('No session found session', err);
-                                        res.statusCode = 401;
-                                        res.statusMessage = 'User is unauthorized.';
-                                        return [2 /*return*/, (0, exports.responseBodyBuilder)(res)];
-                                    }
-                                    if (!!!session) return [3 /*break*/, 2];
-                                    console.log('Session found', session);
-                                    if (session.isLoggedIn) {
-                                        req.session.isLoggedIn = session.isLoggedIn;
-                                        req.session.user = session.user;
-                                    }
-                                    return [4 /*yield*/, req.session.destroy(session.id, function (err) {
-                                            if (err) {
-                                                console.log("Couldn't destroy old session");
-                                                next();
-                                            }
-                                            else {
-                                                console.log('Destroyed session');
-                                                next();
-                                            }
-                                        })];
-                                case 1:
-                                    _a.sent();
-                                    _a.label = 2;
-                                case 2: return [2 /*return*/];
+                return [4 /*yield*/, req.sessionStore.get(sessionToken, function (err, session) {
+                        if (err) {
+                            console.log('No session found session', err);
+                            res.statusCode = 401;
+                            res.statusMessage = 'User is unauthorized.';
+                            return (0, exports.responseBodyBuilder)(res);
+                        }
+                        if (!!session) {
+                            console.log('Session found', session);
+                            if (session.isLoggedIn) {
+                                req.session.isLoggedIn = session.isLoggedIn;
+                                req.session.user = session.user;
                             }
-                        });
-                    }); })];
+                            req.session.destroy(session.id, function (err) {
+                                if (err) {
+                                    console.log("Couldn't destroy old session");
+                                }
+                                else {
+                                    console.log('Destroyed session');
+                                }
+                            });
+                            console.log('Moving on', req.session.isLoggedIn);
+                            next();
+                        }
+                    })];
             case 1:
                 _a.sent();
-                console.log("Didn't wait");
                 return [2 /*return*/];
         }
     });

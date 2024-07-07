@@ -54,7 +54,7 @@ export const findSession = async (req, res, next: NextFunction)=>{
             next();
         }
         console.log(req.method, 'Made it through');
-        await req.sessionStore.get(sessionToken, async (err, session) => {
+        await req.sessionStore.get(sessionToken, (err, session) => {
             if (err) {
                 console.log('No session found session', err);
                 res.statusCode = 401;
@@ -67,17 +67,16 @@ export const findSession = async (req, res, next: NextFunction)=>{
                     req.session.isLoggedIn = session.isLoggedIn;
                     req.session.user = session.user;
                 }
-                await req.session.destroy(session.id, (err) => {
+                req.session.destroy(session.id, (err) => {
                     if (err) {
                         console.log("Couldn't destroy old session");
-                        next();
                     } else {
                         console.log('Destroyed session');
-                        next();
                     }
                 });
+                console.log('Moving on', req.session.isLoggedIn)
+                next();
             }
         });
-        console.log("Didn't wait")
 }
 
