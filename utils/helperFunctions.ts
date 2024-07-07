@@ -43,17 +43,17 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
     })
 }
 
-export const findSession = async (req, res, next: NextFunction)=>{
+export const findSession = (req, res, next: NextFunction)=>{
         const sessionToken = req.headers['kanban_user'];
         if (sessionToken.length < 1) {
             console.log("Empty User ID");
-            next();
+            return next();
         }
         if(sessionToken === req.sessionID){
             console.log('equal')
-            next();
+            return next();
         }
-        req.sessionStore.load(sessionToken, (err, session) => {
+        return req.sessionStore.load(sessionToken, (err, session) => {
             if (err || !session) {
                 console.log('No session found session', err);
                 res.statusCode = 401;
