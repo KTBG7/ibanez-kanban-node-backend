@@ -63,26 +63,8 @@ export const findSession = async (req, res, next: NextFunction)=>{
             }
             if (!!session) {
                 console.log('Session found', session);
-                if(session.isLoggedIn){
-                    req.session.isLoggedIn = session.isLoggedIn;
-                    req.session.user = session.user;
-                }
-                req.session.destroy(session.id, (err) => {
-                    if (err) {
-                        console.log("Couldn't destroy old session");
-                    } else {
-                        console.log('Destroyed session');
-                    }
-                });
-
-                console.log(req.session, 'Request session debug')
-                req.session.save((err)=>{
-                    if(err){
-                        console.log("Couldn't save");
-                    }else{
-                        next();
-                    }
-                });
+                req.sessionStore.createSession(req, session);
+                console.log(req.session, 'Request session debug');
             }
         });
 }

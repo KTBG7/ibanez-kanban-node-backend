@@ -46,6 +46,7 @@ var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0,
             case 0: return [4 /*yield*/, (0, helperFunctions_1.findSession)(req, res, next)];
             case 1:
                 _a.sent();
+                console.log('LOGIN LOGGER: ', req.session);
                 if (req.session.user && req.session.isLoggedIn) {
                     res.statusCode = 220;
                     res.statusMessage = "User has an active session, redirecting to kanban.";

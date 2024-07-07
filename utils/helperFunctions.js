@@ -102,27 +102,8 @@ var findSession = function (req, res, next) { return __awaiter(void 0, void 0, v
                         }
                         if (!!session) {
                             console.log('Session found', session);
-                            if (session.isLoggedIn) {
-                                req.session.isLoggedIn = session.isLoggedIn;
-                                req.session.user = session.user;
-                            }
-                            req.session.destroy(session.id, function (err) {
-                                if (err) {
-                                    console.log("Couldn't destroy old session");
-                                }
-                                else {
-                                    console.log('Destroyed session');
-                                }
-                            });
+                            req.sessionStore.createSession(req, session);
                             console.log(req.session, 'Request session debug');
-                            req.session.save(function (err) {
-                                if (err) {
-                                    console.log("Couldn't save");
-                                }
-                                else {
-                                    next();
-                                }
-                            });
                         }
                     })];
             case 1:
