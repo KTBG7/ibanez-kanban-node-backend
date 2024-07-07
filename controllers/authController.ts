@@ -7,6 +7,11 @@ const User: Model<UserType> = model('User', require('../models/user'));
 const bcrypt = require('bcryptjs');
 
 const login = async (req: any, res: Response, next) =>{
+    if(req.session.user && req.session.isLoggedIn){
+        res.statusCode = 220;
+        res.statusMessage = "User has an active session, redirecting to kanban.";
+        return responseBodyBuilder(res, req);
+    }
     if(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1){
         const sessionFound = await findSession(req.headers['kanban_user'], req);
         console.log('sessionFound', sessionFound);
@@ -62,6 +67,11 @@ const login = async (req: any, res: Response, next) =>{
 }
 
 const signup = async (req:any, res: Response, next) =>{
+    if(req.session.user && req.session.isLoggedIn){
+        res.statusCode = 220;
+        res.statusMessage = "User has an active session, redirecting to kanban.";
+        return responseBodyBuilder(res, req);
+    }
     if(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1){
         const sessionFound = await findSession(req.headers['kanban_user'], req);
         if(sessionFound){

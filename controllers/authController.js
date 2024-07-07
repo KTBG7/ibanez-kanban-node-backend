@@ -45,6 +45,11 @@ var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0,
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                if (req.session.user && req.session.isLoggedIn) {
+                    res.statusCode = 220;
+                    res.statusMessage = "User has an active session, redirecting to kanban.";
+                    return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
+                }
                 if (!(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1)) return [3 /*break*/, 4];
                 return [4 /*yield*/, (0, helperFunctions_1.findSession)(req.headers['kanban_user'], req)];
             case 1:
@@ -106,6 +111,11 @@ var signup = function (req, res, next) { return __awaiter(void 0, void 0, void 0
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                if (req.session.user && req.session.isLoggedIn) {
+                    res.statusCode = 220;
+                    res.statusMessage = "User has an active session, redirecting to kanban.";
+                    return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
+                }
                 if (!(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1)) return [3 /*break*/, 4];
                 return [4 /*yield*/, (0, helperFunctions_1.findSession)(req.headers['kanban_user'], req)];
             case 1:
