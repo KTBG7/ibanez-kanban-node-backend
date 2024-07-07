@@ -30,7 +30,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: mongoStore,
-    cookie: { sameSite: "none", path: "/", httpOnly: true, secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 }
+    cookie: { sameSite: "strict", path: "/", httpOnly: true, secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 }
 }));
 app.use(authRoutes);
 app.use(userRoutes);

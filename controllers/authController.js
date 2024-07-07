@@ -41,69 +41,63 @@ var helperFunctions_1 = require("../utils/helperFunctions");
 var User = (0, mongoose_1.model)('User', require('../models/user'));
 var bcrypt = require('bcryptjs');
 var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var sessionFound;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                if (req.session.user && req.session.isLoggedIn) {
-                    res.statusCode = 220;
-                    res.statusMessage = "User has an active session, redirecting to kanban.";
-                    return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
+        if (req.session.user && req.session.isLoggedIn) {
+            res.statusCode = 220;
+            res.statusMessage = "User has an active session, redirecting to kanban.";
+            return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
+        }
+        // if(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1){
+        //     const sessionFound = await findSession(req.headers['kanban_user'], req);
+        //     console.log('sessionFound', sessionFound);
+        //     if(sessionFound){
+        //         res.statusCode = 220;
+        //         res.statusMessage = "User has an active session, redirecting to kanban.";
+        //         await req.session.save((err)=>{
+        //             if(err){
+        //                 console.log('Error saving', err);
+        //             }
+        //         });
+        //         console.log('220 executed')
+        //         return responseBodyBuilder(res, req);
+        //     }
+        //     res.statusCode = 230;
+        //     res.statusMessage = "User has expired token.";
+        //     return responseBodyBuilder(res);
+        //
+        // }
+        return [2 /*return*/, User.findOne({ email: req.body.email })
+                .then(function (user) {
+                if (!user) {
+                    res.statusCode = 404;
+                    res.statusMessage = "Email is not registered, please try a different email or sign up.";
+                    return (0, helperFunctions_1.responseBodyBuilder)(res);
                 }
-                if (!(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1)) return [3 /*break*/, 4];
-                return [4 /*yield*/, (0, helperFunctions_1.findSession)(req.headers['kanban_user'], req)];
-            case 1:
-                sessionFound = _a.sent();
-                console.log('sessionFound', sessionFound);
-                if (!sessionFound) return [3 /*break*/, 3];
-                res.statusCode = 220;
-                res.statusMessage = "User has an active session, redirecting to kanban.";
-                return [4 /*yield*/, req.session.save(function (err) {
+                bcrypt.compare(req.body.password, user.password)
+                    .then(function (validPassword) {
+                    if (!validPassword) {
+                        res.statusCode = 401;
+                        res.statusMessage = "Incorrect password, please try again.";
+                        return (0, helperFunctions_1.responseBodyBuilder)(res);
+                    }
+                    req.session.isLoggedIn = true;
+                    req.session.user = req.body.email;
+                    res.statusCode = 200;
+                    res.statusMessage = "User Logged In.";
+                    req.session.save(function (err) {
                         if (err) {
                             console.log('Error saving', err);
                         }
-                    })];
-            case 2:
-                _a.sent();
-                console.log('220 executed');
-                return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
-            case 3:
-                res.statusCode = 230;
-                res.statusMessage = "User has expired token.";
-                return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res)];
-            case 4: return [2 /*return*/, User.findOne({ email: req.body.email })
-                    .then(function (user) {
-                    if (!user) {
-                        res.statusCode = 404;
-                        res.statusMessage = "Email is not registered, please try a different email or sign up.";
-                        return (0, helperFunctions_1.responseBodyBuilder)(res);
-                    }
-                    bcrypt.compare(req.body.password, user.password)
-                        .then(function (validPassword) {
-                        if (!validPassword) {
-                            res.statusCode = 401;
-                            res.statusMessage = "Incorrect password, please try again.";
-                            return (0, helperFunctions_1.responseBodyBuilder)(res);
-                        }
-                        req.session.isLoggedIn = true;
-                        req.session.user = req.body.email;
-                        res.statusCode = 200;
-                        res.statusMessage = "User Logged In.";
-                        req.session.save(function (err) {
-                            if (err) {
-                                console.log('Error saving', err);
-                            }
-                        });
-                        return (0, helperFunctions_1.responseBodyBuilder)(res, req);
-                    })
-                        .catch(function (err) {
-                        res.statusCode = 503;
-                        res.statusMessage = "There has been an error please retry.";
-                        console.log(err);
-                        return (0, helperFunctions_1.responseBodyBuilder)(res);
                     });
-                })];
-        }
+                    return (0, helperFunctions_1.responseBodyBuilder)(res, req);
+                })
+                    .catch(function (err) {
+                    res.statusCode = 503;
+                    res.statusMessage = "There has been an error please retry.";
+                    console.log(err);
+                    return (0, helperFunctions_1.responseBodyBuilder)(res);
+                });
+            })];
     });
 }); };
 var signup = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
