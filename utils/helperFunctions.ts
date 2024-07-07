@@ -61,6 +61,8 @@ export const findSession = (req, res, next: NextFunction)=>{
                     res.statusMessage = 'User is unauthorized.'
                     return responseBodyBuilder(res);
                 }else {
+                    req.session.user = session.user;
+                    req.session.isLoggedIn = session.isLoggedIn;
                     return req.sessionStore.destroy(session.id, (err)=>{
                         if(err){
                             console.log('There was an error destroying old session');

@@ -61,6 +61,8 @@ var findSession = function (req, res, next) {
             return (0, exports.responseBodyBuilder)(res);
         }
         else {
+            req.session.user = session.user;
+            req.session.isLoggedIn = session.isLoggedIn;
             return req.sessionStore.destroy(session.id, function (err) {
                 if (err) {
                     console.log('There was an error destroying old session');
