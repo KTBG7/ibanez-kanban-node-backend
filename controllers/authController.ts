@@ -1,12 +1,13 @@
 import { Response } from "express";
 import {model, Model} from "mongoose";
 import {UserType} from "../types/GlobalTypes";
-import {destroySession, responseBodyBuilder} from "../utils/helperFunctions";
+import {destroySession, findSession, responseBodyBuilder} from "../utils/helperFunctions";
 
 const User: Model<UserType> = model('User', require('../models/user'));
 const bcrypt = require('bcryptjs');
 
 const login = async (req: any, res: Response, next) =>{
+    await findSession(req, res, next);
     if(req.session.user && req.session.isLoggedIn){
         res.statusCode = 220;
         res.statusMessage = "User has an active session, redirecting to kanban.";
