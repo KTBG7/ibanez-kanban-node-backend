@@ -43,6 +43,9 @@ var responseBodyBuilder = function (res, req, boards) {
 };
 exports.responseBodyBuilder = responseBodyBuilder;
 var findSession = function (req, res, next) {
+    if (req.method === 'OPTIONS') {
+        next();
+    }
     var sessionToken = req.headers['kanban_user'];
     if (sessionToken.length < 1) {
         console.log("Empty User ID");

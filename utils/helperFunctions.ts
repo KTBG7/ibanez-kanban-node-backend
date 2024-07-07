@@ -1,5 +1,6 @@
 import { Response } from "express";
 import {BoardType} from "../types/GlobalTypes";
+import {IncomingMessage} from "node:http";
 
 const generateToken = require('../utils/CsrfUtil').generateToken
 const defaultDestroyCallback = (err)=>{
@@ -43,6 +44,9 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
 }
 
 export const findSession = (req, res, next)=>{
+        if( req.method === 'OPTIONS'){
+            next();
+        }
         const sessionToken = req.headers['kanban_user'];
         if (sessionToken.length < 1) {
             console.log("Empty User ID");
