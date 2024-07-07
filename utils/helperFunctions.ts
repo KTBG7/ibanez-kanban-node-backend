@@ -45,31 +45,35 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
 
 export const findSession = (req, res, next: NextFunction)=>{
         const sessionToken = req.headers['kanban_user'];
+        if(!sessionToken){
+            next();
+        }
         if (sessionToken.length < 1) {
             console.log("Empty User ID");
-            return next();
-        }
-        if(sessionToken === req.sessionID){
+            next();
+        }else if(sessionToken === req.sessionID){
             console.log('equal')
-            return next();
+            next();
+        }else{
+            req.sessionStore.load(sessionToken, (err, session) => {
+                if (err || !session) {
+                    console.log('No session found session', err);
+                    res.statusCode = 401;
+                    res.statusMessage = 'User is unauthorized.'
+                    return responseBodyBuilder(res);
+                }
+                if (!!session) {
+                    req.sessionStore.destroy(session.id, (err)=>{
+                        if(err){
+                            console.log('There was an error destroying old session');
+                        }else{
+                            console.log('Old Session destroyed!')
+                        }
+                    });
+                    next();
+                }
+            });
         }
-        return req.sessionStore.load(sessionToken, (err, session) => {
-            if (err || !session) {
-                console.log('No session found session', err);
-                res.statusCode = 401;
-                res.statusMessage = 'User is unauthorized.'
-                return responseBodyBuilder(res);
-            }
-            if (!!session) {
-                req.sessionStore.destroy(session.id, (err)=>{
-                    if(err){
-                        console.log('There was an error destroying old session');
-                    }else{
-                        console.log('Old Session destroyed!')
-                    }
-                });
-                next();
-            }
-        });
+
 }
 

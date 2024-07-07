@@ -44,32 +44,37 @@ var responseBodyBuilder = function (res, req, boards) {
 exports.responseBodyBuilder = responseBodyBuilder;
 var findSession = function (req, res, next) {
     var sessionToken = req.headers['kanban_user'];
+    if (!sessionToken) {
+        next();
+    }
     if (sessionToken.length < 1) {
         console.log("Empty User ID");
-        return next();
+        next();
     }
-    if (sessionToken === req.sessionID) {
+    else if (sessionToken === req.sessionID) {
         console.log('equal');
-        return next();
+        next();
     }
-    return req.sessionStore.load(sessionToken, function (err, session) {
-        if (err || !session) {
-            console.log('No session found session', err);
-            res.statusCode = 401;
-            res.statusMessage = 'User is unauthorized.';
-            return (0, exports.responseBodyBuilder)(res);
-        }
-        if (!!session) {
-            req.sessionStore.destroy(session.id, function (err) {
-                if (err) {
-                    console.log('There was an error destroying old session');
-                }
-                else {
-                    console.log('Old Session destroyed!');
-                }
-            });
-            next();
-        }
-    });
+    else {
+        req.sessionStore.load(sessionToken, function (err, session) {
+            if (err || !session) {
+                console.log('No session found session', err);
+                res.statusCode = 401;
+                res.statusMessage = 'User is unauthorized.';
+                return (0, exports.responseBodyBuilder)(res);
+            }
+            if (!!session) {
+                req.sessionStore.destroy(session.id, function (err) {
+                    if (err) {
+                        console.log('There was an error destroying old session');
+                    }
+                    else {
+                        console.log('Old Session destroyed!');
+                    }
+                });
+                next();
+            }
+        });
+    }
 };
 exports.findSession = findSession;
