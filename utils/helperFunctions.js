@@ -43,6 +43,7 @@ var responseBodyBuilder = function (res, req, boards) {
 };
 exports.responseBodyBuilder = responseBodyBuilder;
 var findSession = function (req, res, next) {
+    console.log('REQUEST LOGGER', req.body, req.method);
     req.sessionStore.load(req.headers['kanban_user'], function (err, session) {
         if (!req.headers['kanban_user'] || req.headers['kanban_user'].length < 1) {
             next();

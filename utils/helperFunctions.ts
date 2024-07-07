@@ -44,6 +44,7 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
 }
 
 export const findSession = (req, res, next: NextFunction)=>{
+            console.log('REQUEST LOGGER', req.body, req.method)
             req.sessionStore.load(req.headers['kanban_user'], (err, session) => {
                 if(!req.headers['kanban_user'] || req.headers['kanban_user'].length < 1){
                     next();
