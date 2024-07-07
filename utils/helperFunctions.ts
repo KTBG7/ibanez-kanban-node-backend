@@ -48,6 +48,7 @@ export const findSession = (req, res, next: NextFunction)=>{
                 return next();
             }
             req.sessionStore.load(req.headers['kanban_user'], (err, session) => {
+                console.log('OLD SESSION', session);
                 if(!req.headers['kanban_user'] || req.headers['kanban_user'].length < 1){
                     return next();
                 }
