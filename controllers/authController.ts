@@ -6,7 +6,7 @@ import {destroySession, findSession, responseBodyBuilder} from "../utils/helperF
 const User: Model<UserType> = model('User', require('../models/user'));
 const bcrypt = require('bcryptjs');
 
-const login = async (req: any, res: Response, next) =>{
+const login = (req: any, res: Response, next) =>{
     console.log(req.session, "Login LOGGER");
     if(req.session.user && req.session.isLoggedIn){
         res.statusCode = 220;

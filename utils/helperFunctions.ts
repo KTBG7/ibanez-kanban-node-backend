@@ -44,18 +44,13 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
 }
 
 export const findSession = (req, res, next: NextFunction)=>{
-        const sessionToken = req.headers['kanban_user'];
-        if(!sessionToken){
-            next();
-        }
-        if (sessionToken.length < 1) {
-            console.log("Empty User ID");
-            next();
-        }else if(sessionToken === req.sessionID){
-            console.log('equal')
-            next();
-        }else{
-            req.sessionStore.load(sessionToken, (err, session) => {
+            req.sessionStore.load(req.headers['kanban_user'], (err, session) => {
+                if(!req.headers['kanban_user'] || req.headers['kanban_user'].length < 1){
+                    next();
+                }
+                if(req.body.email && req.body.email.includes('@') && req.body.password){
+                    next();
+                }
                 if (err || !session) {
                     console.log('No session found session', err);
                     res.statusCode = 401;
@@ -65,16 +60,14 @@ export const findSession = (req, res, next: NextFunction)=>{
                     req.sessionStore.destroy(session.id, (err)=>{
                         if(err){
                             console.log('There was an error destroying old session');
-                            next();
                         }else{
                             console.log('Old Session destroyed!');
-                            next();
                         }
+                        next();
                     });
 
                 }
             });
-        }
 
 }
 
