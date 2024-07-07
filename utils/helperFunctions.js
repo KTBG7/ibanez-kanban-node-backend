@@ -67,7 +67,11 @@ var findSession = function (sessionToken, req) { return __awaiter(void 0, void 0
                                     }
                                     if (!!!session) return [3 /*break*/, 2];
                                     console.log('Session found', session);
-                                    req.session.email = session.email;
+                                    if (session.isLoggedIn) {
+                                        req.session.email = session.email;
+                                        req.session.isLoggedIn = session.isLoggedIn;
+                                        req.session.cookie = session.cookie;
+                                    }
                                     return [4 /*yield*/, req.sessionStore.destroy(session.id, function (err) {
                                             if (err) {
                                                 console.log("Couldn't destroy old session");

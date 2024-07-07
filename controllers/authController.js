@@ -41,7 +41,6 @@ var helperFunctions_1 = require("../utils/helperFunctions");
 var User = (0, mongoose_1.model)('User', require('../models/user'));
 var bcrypt = require('bcryptjs');
 var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var sessionFound;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -53,8 +52,8 @@ var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0,
                 if (!(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1)) return [3 /*break*/, 4];
                 return [4 /*yield*/, (0, helperFunctions_1.findSession)(req.headers['kanban_user'], req)];
             case 1:
-                sessionFound = _a.sent();
-                if (!sessionFound) return [3 /*break*/, 3];
+                _a.sent();
+                if (!req.session.isLoggedIn) return [3 /*break*/, 3];
                 res.statusCode = 220;
                 res.statusMessage = "User has an active session, redirecting to kanban.";
                 return [4 /*yield*/, req.session.save(function (err) {

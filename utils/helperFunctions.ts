@@ -24,7 +24,11 @@ export const findSession = async (sessionToken, req)=>{
             }
             if (!!session) {
                 console.log('Session found', session)
-                req.session.email = session.email;
+                if(session.isLoggedIn){
+                    req.session.email = session.email;
+                    req.session.isLoggedIn = session.isLoggedIn;
+                    req.session.cookie = session.cookie;
+                }
                 return await req.sessionStore.destroy(session.id, (err) => {
                     if (err) {
                         console.log("Couldn't destroy old session");
