@@ -3,6 +3,7 @@ var app = express();
 var bParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('express-session');
+var cors = require('cors');
 var cookieParser = require('cookie-parser');
 var MongoDBStore = require('connect-mongodb-session')(session);
 var dotenv = require('dotenv');
@@ -16,6 +17,10 @@ var mongoStore = new MongoDBStore({
     collection: "sessions"
 });
 app.set('trust proxy', 1);
+app.use(cors({
+    origin: process.env.UI_DOMAIN,
+    credentials: true
+}));
 app.use(helmet());
 app.use(cookieParser(secret));
 app.use(bParser.json());
