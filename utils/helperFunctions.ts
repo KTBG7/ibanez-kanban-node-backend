@@ -47,11 +47,11 @@ export const findSession = (req, res, next: NextFunction)=>{
             console.log('REQUEST LOGGER', req.body, req.method)
             req.sessionStore.load(req.headers['kanban_user'], (err, session) => {
                 if(!req.headers['kanban_user'] || req.headers['kanban_user'].length < 1){
-                    next();
+                    return next();
                 }
                 if(req.body.email && req.body.email.includes('@') && req.body.password){
                     console.log('READING NEXT FOR BODY')
-                    next();
+                    return next();
                 }
                 if (err || !session) {
                     console.log('No session found session', err);
@@ -59,13 +59,13 @@ export const findSession = (req, res, next: NextFunction)=>{
                     res.statusMessage = 'User is unauthorized.'
                     return responseBodyBuilder(res);
                 }else {
-                    req.sessionStore.destroy(session.id, (err)=>{
+                    return req.sessionStore.destroy(session.id, (err)=>{
                         if(err){
                             console.log('There was an error destroying old session');
                         }else{
                             console.log('Old Session destroyed!');
                         }
-                        next();
+                        return next();
                     });
 
                 }

@@ -46,11 +46,11 @@ var findSession = function (req, res, next) {
     console.log('REQUEST LOGGER', req.body, req.method);
     req.sessionStore.load(req.headers['kanban_user'], function (err, session) {
         if (!req.headers['kanban_user'] || req.headers['kanban_user'].length < 1) {
-            next();
+            return next();
         }
         if (req.body.email && req.body.email.includes('@') && req.body.password) {
             console.log('READING NEXT FOR BODY');
-            next();
+            return next();
         }
         if (err || !session) {
             console.log('No session found session', err);
@@ -59,14 +59,14 @@ var findSession = function (req, res, next) {
             return (0, exports.responseBodyBuilder)(res);
         }
         else {
-            req.sessionStore.destroy(session.id, function (err) {
+            return req.sessionStore.destroy(session.id, function (err) {
                 if (err) {
                     console.log('There was an error destroying old session');
                 }
                 else {
                     console.log('Old Session destroyed!');
                 }
-                next();
+                return next();
             });
         }
     });
