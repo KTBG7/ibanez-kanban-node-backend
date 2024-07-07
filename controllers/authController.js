@@ -50,10 +50,12 @@ var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0,
                     res.statusMessage = "User has an active session, redirecting to kanban.";
                     return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
                 }
-                if (!(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1)) return [3 /*break*/, 3];
-                foundSession = (0, helperFunctions_1.findSession)(req.headers['kanban_user'], req);
+                if (!(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1)) return [3 /*break*/, 4];
+                return [4 /*yield*/, (0, helperFunctions_1.findSession)(req.headers['kanban_user'], req)];
+            case 1:
+                foundSession = _a.sent();
                 console.log(foundSession, 'test found');
-                if (!foundSession.isLoggedIn) return [3 /*break*/, 2];
+                if (!foundSession.isLoggedIn) return [3 /*break*/, 3];
                 res.statusCode = 220;
                 res.statusMessage = "User has an active session, redirecting to kanban.";
                 return [4 /*yield*/, req.session.save(function (err) {
@@ -61,14 +63,14 @@ var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0,
                             console.log('Error saving', err);
                         }
                     })];
-            case 1:
+            case 2:
                 _a.sent();
                 return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
-            case 2:
+            case 3:
                 res.statusCode = 230;
                 res.statusMessage = "User has expired token.";
                 return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res)];
-            case 3: return [2 /*return*/, User.findOne({ email: req.body.email })
+            case 4: return [2 /*return*/, User.findOne({ email: req.body.email })
                     .then(function (user) {
                     if (!user) {
                         res.statusCode = 404;
