@@ -61,7 +61,7 @@ var findSession = function (sessionToken, req) { return __awaiter(void 0, void 0
                                         console.log('No session found session', err);
                                         return [2 /*return*/, false];
                                     }
-                                    if (!session) return [3 /*break*/, 2];
+                                    if (!!!session) return [3 /*break*/, 2];
                                     console.log('Session found', session);
                                     req.session.email = session.email;
                                     return [4 /*yield*/, req.sessionStore.destroy(session.id, function (err) {

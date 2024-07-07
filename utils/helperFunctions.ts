@@ -19,7 +19,7 @@ export const findSession = async (sessionToken, req)=>{
                 console.log('No session found session', err)
                 return false;
             }
-            if (session) {
+            if (!!session) {
                 console.log('Session found', session)
                 req.session.email = session.email;
                 return await req.sessionStore.destroy(session.id, (err) => {
