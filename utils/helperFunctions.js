@@ -43,6 +43,7 @@ var responseBodyBuilder = function (res, req, boards) {
 };
 exports.responseBodyBuilder = responseBodyBuilder;
 var findSession = function (req, res, next) {
+    console.log(req);
     if (req.method === 'OPTIONS') {
         next();
     }

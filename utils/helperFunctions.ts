@@ -44,6 +44,7 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
 }
 
 export const findSession = (req, res, next)=>{
+    console.log(req);
         if( req.method === 'OPTIONS'){
             next();
         }
