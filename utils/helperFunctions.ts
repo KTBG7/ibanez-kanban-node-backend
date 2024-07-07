@@ -74,6 +74,8 @@ export const findSession = async (req, res, next: NextFunction)=>{
                         console.log('Destroyed session');
                     }
                 });
+
+                console.log(req.session, 'Request session debug')
                 req.session.save((err)=>{
                     if(err){
                         console.log("Couldn't save");

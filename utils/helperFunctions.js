@@ -114,6 +114,7 @@ var findSession = function (req, res, next) { return __awaiter(void 0, void 0, v
                                     console.log('Destroyed session');
                                 }
                             });
+                            console.log(req.session, 'Request session debug');
                             req.session.save(function (err) {
                                 if (err) {
                                     console.log("Couldn't save");
