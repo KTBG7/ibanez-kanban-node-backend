@@ -23,7 +23,8 @@ app.set('trust proxy', 1);
 app.use(cors({
     origin: process.env.UI_DOMAIN,
     credentials: true,
-    preflightContinue: true
+    preflightContinue: false,
+    optionsSuccessStatus: 200
 }));
 app.use(helmet());
 app.use(cookieParser(secret));
@@ -36,12 +37,6 @@ app.use(session({
     store: mongoStore,
     cookie: { sameSite: "strict", path: "/", httpOnly: true, secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 }
 }));
-app.options("/*", function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', process.env.UI_DOMAIN);
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, kanban_user, x-csrf-token');
-    res.send(200);
-});
 app.use(helperFunctions_1.findSession);
 app.use(authRoutes);
 app.use(userRoutes);
