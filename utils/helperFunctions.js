@@ -43,13 +43,14 @@ var responseBodyBuilder = function (res, req, boards) {
 };
 exports.responseBodyBuilder = responseBodyBuilder;
 var findSession = function (req, res, next) {
-    console.log('REQUEST LOGGER', req.body, req.method);
+    if (req.session && req.session.isLoggedIn) {
+        return next();
+    }
     req.sessionStore.load(req.headers['kanban_user'], function (err, session) {
         if (!req.headers['kanban_user'] || req.headers['kanban_user'].length < 1) {
             return next();
         }
         if (req.body.email && req.body.email.includes('@') && req.body.password) {
-            console.log('READING NEXT FOR BODY');
             return next();
         }
         if (err || !session) {

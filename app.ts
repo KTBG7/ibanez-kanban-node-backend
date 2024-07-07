@@ -1,5 +1,3 @@
-import {findSession} from "./utils/helperFunctions";
-
 const express = require('express');
 
 const app = express();
@@ -54,8 +52,6 @@ app.use(session({
     store: mongoStore,
     cookie: { sameSite: "strict", path: "/", httpOnly: true, secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 }
 }));
-
-app.use(findSession);
 
 app.use(authRoutes);
 

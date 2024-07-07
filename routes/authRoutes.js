@@ -1,7 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var helperFunctions_1 = require("../utils/helperFunctions");
 var authController = require('../controllers/authController');
 var router = require('express').Router();
 var doubleCsrfProtection = require('../utils/CsrfUtil').doubleCsrfProtection;
-router.post('/login', authController.login);
-router.post('/signup', authController.signup);
+router.post('/login', helperFunctions_1.findSession, authController.login);
+router.post('/signup', helperFunctions_1.findSession, authController.signup);
 router.post('/logout', doubleCsrfProtection, authController.logout);
 module.exports = router;

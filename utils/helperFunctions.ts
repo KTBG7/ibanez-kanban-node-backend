@@ -44,13 +44,14 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
 }
 
 export const findSession = (req, res, next: NextFunction)=>{
-            console.log('REQUEST LOGGER', req.body, req.method)
+            if(req.session && req.session.isLoggedIn){
+                return next();
+            }
             req.sessionStore.load(req.headers['kanban_user'], (err, session) => {
                 if(!req.headers['kanban_user'] || req.headers['kanban_user'].length < 1){
                     return next();
                 }
                 if(req.body.email && req.body.email.includes('@') && req.body.password){
-                    console.log('READING NEXT FOR BODY')
                     return next();
                 }
                 if (err || !session) {
