@@ -49,6 +49,7 @@ var findSession = function (req, res, next) {
             next();
         }
         if (req.body.email && req.body.email.includes('@') && req.body.password) {
+            console.log('READING NEXT FOR BODY');
             next();
         }
         if (err || !session) {
