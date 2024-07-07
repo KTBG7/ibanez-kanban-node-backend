@@ -1,7 +1,7 @@
 import { Response } from "express";
 import {model, Model} from "mongoose";
 import {UserType} from "../types/GlobalTypes";
-import {destroySession, findSession, responseBodyBuilder} from "../utils/helperFunctions";
+import {destroySession, responseBodyBuilder} from "../utils/helperFunctions";
 
 const User: Model<UserType> = model('User', require('../models/user'));
 const bcrypt = require('bcryptjs');
