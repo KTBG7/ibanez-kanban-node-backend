@@ -65,7 +65,7 @@ export const findSession = (req, res, next)=>{
                 return responseBodyBuilder(res);
             }
             if (!!session) {
-                console.log('Session found', session)
+                console.log('Session found', session);
                 if(session.isLoggedIn){
                     req.session.isLoggedIn = session.isLoggedIn;
                     req.session.user = session.user;

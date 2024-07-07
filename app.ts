@@ -8,8 +8,6 @@ const mongoose = require('mongoose');
 
 const session = require('express-session');
 
-const cors = require('cors');
-
 const cookieParser = require('cookie-parser');
 
 const MongoDBStore = require('connect-mongodb-session')(session);
@@ -31,12 +29,6 @@ const mongoStore = new MongoDBStore({
 });
 
 app.set('trust proxy', 1);
-
-
-app.use(cors({
-    origin: process.env.UI_DOMAIN,
-    credentials: true
-}));
 
 app.use(helmet())
 
