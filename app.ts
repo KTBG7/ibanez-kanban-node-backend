@@ -37,7 +37,8 @@ app.set('trust proxy', 1);
 
 app.use(cors({
     origin: process.env.UI_DOMAIN,
-    credentials: true
+    credentials: true,
+    preflightContinue: true
 }));
 
 app.use(helmet())
