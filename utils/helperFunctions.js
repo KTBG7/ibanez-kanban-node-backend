@@ -40,7 +40,12 @@ exports.responseBodyBuilder = exports.findSession = exports.destroySession = voi
 var generateToken = require('../utils/CsrfUtil').generateToken;
 var destroySession = function (req) {
     return req.session.destroy(function (err) {
-        console.log("Error destroying session", err);
+        if (err) {
+            console.log('Error Destroying session');
+        }
+        else {
+            console.log('Success destroying session');
+        }
     });
 };
 exports.destroySession = destroySession;
