@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var helperFunctions_1 = require("./utils/helperFunctions");
 var express = require('express');
 var app = express();
 var bParser = require('body-parser');
@@ -32,6 +35,7 @@ app.use(session({
     store: mongoStore,
     cookie: { sameSite: "strict", path: "/", httpOnly: true, secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 }
 }));
+app.use(helperFunctions_1.findSession);
 app.use(authRoutes);
 app.use(userRoutes);
 mongoose.connect(process.env.MONGODB_SECRET).then(function (res) {

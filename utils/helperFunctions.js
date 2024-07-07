@@ -1,47 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.responseBodyBuilder = exports.findSession = exports.destroySession = void 0;
+exports.findSession = exports.responseBodyBuilder = exports.destroySession = void 0;
 var generateToken = require('../utils/CsrfUtil').generateToken;
-var destroySession = function (req) {
-    return req.session.destroy(function (err) {
-        if (err) {
-            console.log('Error Destroying session');
-        }
-        else {
-            console.log('Success destroying session');
-        }
-    });
+var defaultDestroyCallback = function (err) {
+    if (err) {
+        console.log('Error Destroying session');
+    }
+    else {
+        console.log('Success destroying session');
+    }
+};
+var destroySession = function (req, sessionId, callback) {
+    if (callback === void 0) { callback = defaultDestroyCallback; }
+    return req.session.destroy(sessionId, callback);
 };
 exports.destroySession = destroySession;
-var findSession = function (sessionToken, req) {
-    if (sessionToken === req.sessionID) {
-        console.log('equal');
-        return true;
-    }
-    return req.sessionStore.get(sessionToken, function (err, session) {
-        if (err) {
-            console.log('No session found session', err);
-            return false;
-        }
-        if (!!session) {
-            console.log('Session found', session);
-            if (session.isLoggedIn) {
-                return session;
-            }
-            return req.sessionStore.destroy(session.id, function (err) {
-                if (err) {
-                    console.log("Couldn't destroy old session");
-                    return false;
-                }
-                else {
-                    console.log('Destroyed session');
-                    return true;
-                }
-            });
-        }
-    });
-};
-exports.findSession = findSession;
 var responseBodyBuilder = function (res, req, boards) {
     if (boards && req) {
         var token = generateToken(req, res);
@@ -67,3 +40,38 @@ var responseBodyBuilder = function (res, req, boards) {
     });
 };
 exports.responseBodyBuilder = responseBodyBuilder;
+var findSession = function (req, res, next) {
+    var sessionToken = req.headers['kanban_user'];
+    if (!sessionToken)
+        next();
+    if (sessionToken === req.sessionID) {
+        console.log('equal');
+        next();
+    }
+    req.sessionStore.get(sessionToken, function (err, session) {
+        if (err) {
+            console.log('No session found session', err);
+            res.statusCode = 401;
+            res.statusMessage = 'User is unauthorized.';
+            return (0, exports.responseBodyBuilder)(res);
+        }
+        if (!!session) {
+            console.log('Session found', session);
+            if (session.isLoggedIn) {
+                req.session.isLoggedIn = session.isLoggedIn;
+                req.session.user = session.user;
+            }
+            return (0, exports.destroySession)(session.id, function (err) {
+                if (err) {
+                    console.log("Couldn't destroy old session");
+                    next();
+                }
+                else {
+                    console.log('Destroyed session');
+                    next();
+                }
+            });
+        }
+    });
+};
+exports.findSession = findSession;

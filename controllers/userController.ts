@@ -23,7 +23,7 @@ const getUserBoards = async (req: any, res: Response, next)=>{
     res.statusCode = 401;
     res.statusMessage = 'User is not authenticated';
     if(req.session.user && !req.session.isLoggedIn){
-        await destroySession(req)
+        await destroySession(req, req.session.id)
     }
     return responseBodyBuilder(res)
 }
@@ -33,7 +33,7 @@ const postUserBoards = async (req:any, res: Response, next)=>{
         res.statusCode = 401;
         res.statusMessage = 'User is not authenticated';
         if(req.session.user){
-            await destroySession(req)
+            await destroySession(req, req.session.id)
         }
         return responseBodyBuilder(res)
     }

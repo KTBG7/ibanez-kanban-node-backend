@@ -60,7 +60,7 @@ var getUserBoards = function (req, res, next) { return __awaiter(void 0, void 0,
                 res.statusCode = 401;
                 res.statusMessage = 'User is not authenticated';
                 if (!(req.session.user && !req.session.isLoggedIn)) return [3 /*break*/, 2];
-                return [4 /*yield*/, (0, helperFunctions_1.destroySession)(req)];
+                return [4 /*yield*/, (0, helperFunctions_1.destroySession)(req, req.session.id)];
             case 1:
                 _a.sent();
                 _a.label = 2;
@@ -76,7 +76,7 @@ var postUserBoards = function (req, res, next) { return __awaiter(void 0, void 0
                 res.statusCode = 401;
                 res.statusMessage = 'User is not authenticated';
                 if (!req.session.user) return [3 /*break*/, 2];
-                return [4 /*yield*/, (0, helperFunctions_1.destroySession)(req)];
+                return [4 /*yield*/, (0, helperFunctions_1.destroySession)(req, req.session.id)];
             case 1:
                 _a.sent();
                 _a.label = 2;
