@@ -66,7 +66,7 @@ var findSession = function (sessionToken, req) { return __awaiter(void 0, void 0
                             console.log('Session found', session);
                             if (session.isLoggedIn) {
                                 console.log("New session old values:", req.session);
-                                req.session.email = session.email;
+                                req.session.user = session.user;
                                 req.session.isLoggedIn = session.isLoggedIn;
                                 req.session.cookie.expires = session.cookie.expires;
                                 console.log("New session new values:", req.session);
