@@ -81,6 +81,10 @@ exports.responseBodyBuilder = responseBodyBuilder;
 var findSession = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var sessionToken;
     return __generator(this, function (_a) {
+        console.log(req.method);
+        if (req.method === "OPTIONS") {
+            console.log('OPTIONS FOUND NEED TO IGNORE THIS');
+        }
         sessionToken = req.headers['kanban_user'];
         if (sessionToken.length < 1) {
             console.log("Empty User ID");
