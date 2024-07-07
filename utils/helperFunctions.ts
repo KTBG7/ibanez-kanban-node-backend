@@ -44,10 +44,6 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
 }
 
 export const findSession = async (req, res, next: NextFunction)=>{
-        console.log(req.method);
-        if(req.method  === "OPTIONS"){
-            console.log('OPTIONS FOUND NEED TO IGNORE THIS')
-        }
         const sessionToken = req.headers['kanban_user'];
         if (sessionToken.length < 1) {
             console.log("Empty User ID");

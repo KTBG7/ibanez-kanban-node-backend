@@ -53,6 +53,13 @@ app.use(session({
     cookie: { sameSite: "strict", path: "/", httpOnly: true, secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 }
 }));
 
+app.options("/*", function(req, res, next){
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.send(200);
+});
+
 app.use(findSession);
 
 app.use(authRoutes);
