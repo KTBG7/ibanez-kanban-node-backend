@@ -57,36 +57,32 @@ var findSession = function (sessionToken, req) { return __awaiter(void 0, void 0
                     console.log('equal');
                     return [2 /*return*/, true];
                 }
-                return [4 /*yield*/, req.sessionStore.get(sessionToken, function (err, session) { return __awaiter(void 0, void 0, void 0, function () {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    if (err) {
-                                        console.log('No session found session', err);
-                                        return [2 /*return*/, false];
-                                    }
-                                    if (!!!session) return [3 /*break*/, 2];
-                                    console.log('Session found', session);
-                                    if (session.isLoggedIn) {
-                                        req.session.email = session.email;
-                                        req.session.isLoggedIn = session.isLoggedIn;
-                                        req.session.cookie = session.cookie;
-                                    }
-                                    return [4 /*yield*/, req.sessionStore.destroy(session.id, function (err) {
-                                            if (err) {
-                                                console.log("Couldn't destroy old session");
-                                                return false;
-                                            }
-                                            else {
-                                                console.log('Destroyed session');
-                                                return true;
-                                            }
-                                        })];
-                                case 1: return [2 /*return*/, _a.sent()];
-                                case 2: return [2 /*return*/];
+                return [4 /*yield*/, req.sessionStore.get(sessionToken, function (err, session) {
+                        if (err) {
+                            console.log('No session found session', err);
+                            return false;
+                        }
+                        if (!!session) {
+                            console.log('Session found', session);
+                            if (session.isLoggedIn) {
+                                console.log("New session old values:", req.session);
+                                req.session.email = session.email;
+                                req.session.isLoggedIn = session.isLoggedIn;
+                                req.session.cookie.expires = session.cookie.expires;
+                                console.log("New session new values:", req.session);
                             }
-                        });
-                    }); })];
+                            return req.sessionStore.destroy(session.id, function (err) {
+                                if (err) {
+                                    console.log("Couldn't destroy old session");
+                                    return false;
+                                }
+                                else {
+                                    console.log('Destroyed session');
+                                    return true;
+                                }
+                            });
+                        }
+                    })];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
