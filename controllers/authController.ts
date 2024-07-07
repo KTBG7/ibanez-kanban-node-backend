@@ -12,25 +12,23 @@ const login = async (req: any, res: Response, next) =>{
         res.statusMessage = "User has an active session, redirecting to kanban.";
         return responseBodyBuilder(res, req);
     }
-    // if(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1){
-    //     const sessionFound = await findSession(req.headers['kanban_user'], req);
-    //     console.log('sessionFound', sessionFound);
-    //     if(sessionFound){
-    //         res.statusCode = 220;
-    //         res.statusMessage = "User has an active session, redirecting to kanban.";
-    //         await req.session.save((err)=>{
-    //             if(err){
-    //                 console.log('Error saving', err);
-    //             }
-    //         });
-    //         console.log('220 executed')
-    //         return responseBodyBuilder(res, req);
-    //     }
-    //     res.statusCode = 230;
-    //     res.statusMessage = "User has expired token.";
-    //     return responseBodyBuilder(res);
-    //
-    // }
+    if(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1){
+        const sessionFound = await findSession(req.headers['kanban_user'], req);
+        if(sessionFound){
+            res.statusCode = 220;
+            res.statusMessage = "User has an active session, redirecting to kanban.";
+            await req.session.save((err)=>{
+                if(err){
+                    console.log('Error saving', err);
+                }
+            });
+            return responseBodyBuilder(res, req);
+        }
+        res.statusCode = 230;
+        res.statusMessage = "User has expired token.";
+        return responseBodyBuilder(res);
+
+    }
     return User.findOne({email: req.body.email})
         .then((user)=>{
             if(!user){
