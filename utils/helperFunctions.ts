@@ -1,4 +1,4 @@
-import { Response } from "express";
+import {NextFunction, Response} from "express";
 import {BoardType} from "../types/GlobalTypes";
 import {IncomingMessage} from "node:http";
 
@@ -43,10 +43,7 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
     })
 }
 
-export const findSession = (req, res, next)=>{
-        if( req.method.toUpperCase() === 'OPTIONS'){
-            next();
-        }
+export const findSession = async (req, res, next: NextFunction)=>{
         const sessionToken = req.headers['kanban_user'];
         if (sessionToken.length < 1) {
             console.log("Empty User ID");
@@ -57,7 +54,7 @@ export const findSession = (req, res, next)=>{
             next();
         }
         console.log(req.method, 'Made it through');
-        return req.sessionStore.get(sessionToken, (err, session) => {
+        await req.sessionStore.get(sessionToken, async (err, session) => {
             if (err) {
                 console.log('No session found session', err);
                 res.statusCode = 401;
@@ -70,7 +67,7 @@ export const findSession = (req, res, next)=>{
                     req.session.isLoggedIn = session.isLoggedIn;
                     req.session.user = session.user;
                 }
-                return req.session.destroy(session.id, (err) => {
+                await req.session.destroy(session.id, (err) => {
                     if (err) {
                         console.log("Couldn't destroy old session");
                         next();
@@ -80,6 +77,7 @@ export const findSession = (req, res, next)=>{
                     }
                 });
             }
-        })
+        });
+        console.log("Didn't wait")
 }
 
