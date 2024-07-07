@@ -28,7 +28,7 @@ const login = async (req: any, res: Response, next) =>{
         }
         res.statusCode = 230;
         res.statusMessage = "User has expired token.";
-        return responseBodyBuilder(res, req);
+        return responseBodyBuilder(res);
 
     }
     return User.findOne({email: req.body.email})
@@ -86,7 +86,7 @@ const signup = async (req:any, res: Response, next) =>{
         }
         res.statusCode = 230;
         res.statusMessage = "User has expired token.";
-        return responseBodyBuilder(res, req);
+        return responseBodyBuilder(res);
 
     }
     return User.findOne({email: req.body.email})

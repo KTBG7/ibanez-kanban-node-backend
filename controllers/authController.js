@@ -70,7 +70,7 @@ var login = function (req, res, next) { return __awaiter(void 0, void 0, void 0,
             case 3:
                 res.statusCode = 230;
                 res.statusMessage = "User has expired token.";
-                return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
+                return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res)];
             case 4: return [2 /*return*/, User.findOne({ email: req.body.email })
                     .then(function (user) {
                     if (!user) {
@@ -134,7 +134,7 @@ var signup = function (req, res, next) { return __awaiter(void 0, void 0, void 0
             case 3:
                 res.statusCode = 230;
                 res.statusMessage = "User has expired token.";
-                return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res, req)];
+                return [2 /*return*/, (0, helperFunctions_1.responseBodyBuilder)(res)];
             case 4: return [2 /*return*/, User.findOne({ email: req.body.email })
                     .then(function (user) {
                     if (user) {
