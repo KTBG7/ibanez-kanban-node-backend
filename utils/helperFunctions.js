@@ -91,7 +91,7 @@ var findSession = function (req, res, next) { return __awaiter(void 0, void 0, v
             next();
         }
         req.sessionStore.load(sessionToken, function (err, session) {
-            if (err) {
+            if (err || !session) {
                 console.log('No session found session', err);
                 res.statusCode = 401;
                 res.statusMessage = 'User is unauthorized.';

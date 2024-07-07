@@ -54,7 +54,7 @@ export const findSession = async (req, res, next: NextFunction)=>{
             next();
         }
         req.sessionStore.load(sessionToken, (err, session) => {
-            if (err) {
+            if (err || !session) {
                 console.log('No session found session', err);
                 res.statusCode = 401;
                 res.statusMessage = 'User is unauthorized.'

@@ -39,7 +39,7 @@ app.use(session({
 app.options("/*", function (req, res, next) {
     res.header('Access-Control-Allow-Origin', process.env.UI_DOMAIN);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, kanban_user');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, kanban_user, x-csrf-token');
     res.send(200);
 });
 app.use(helperFunctions_1.findSession);
