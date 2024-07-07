@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var express = require('express');
 var app = express();
 var bParser = require('body-parser');

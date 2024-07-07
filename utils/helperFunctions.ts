@@ -53,8 +53,7 @@ export const findSession = async (req, res, next: NextFunction)=>{
             console.log('equal')
             next();
         }
-        console.log(req.method, 'Made it through');
-        await req.sessionStore.get(sessionToken, (err, session) => {
+        req.sessionStore.load(sessionToken, (err, session) => {
             if (err) {
                 console.log('No session found session', err);
                 res.statusCode = 401;
@@ -63,8 +62,8 @@ export const findSession = async (req, res, next: NextFunction)=>{
             }
             if (!!session) {
                 console.log('Session found', session);
-                req.sessionStore.createSession(req, session);
                 console.log(req.session, 'Request session debug');
+                next();
             }
         });
 }

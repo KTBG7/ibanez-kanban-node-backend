@@ -81,35 +81,29 @@ exports.responseBodyBuilder = responseBodyBuilder;
 var findSession = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var sessionToken;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                sessionToken = req.headers['kanban_user'];
-                if (sessionToken.length < 1) {
-                    console.log("Empty User ID");
-                    next();
-                }
-                if (sessionToken === req.sessionID) {
-                    console.log('equal');
-                    next();
-                }
-                console.log(req.method, 'Made it through');
-                return [4 /*yield*/, req.sessionStore.get(sessionToken, function (err, session) {
-                        if (err) {
-                            console.log('No session found session', err);
-                            res.statusCode = 401;
-                            res.statusMessage = 'User is unauthorized.';
-                            return (0, exports.responseBodyBuilder)(res);
-                        }
-                        if (!!session) {
-                            console.log('Session found', session);
-                            req.sessionStore.createSession(req, session);
-                            console.log(req.session, 'Request session debug');
-                        }
-                    })];
-            case 1:
-                _a.sent();
-                return [2 /*return*/];
+        sessionToken = req.headers['kanban_user'];
+        if (sessionToken.length < 1) {
+            console.log("Empty User ID");
+            next();
         }
+        if (sessionToken === req.sessionID) {
+            console.log('equal');
+            next();
+        }
+        req.sessionStore.load(sessionToken, function (err, session) {
+            if (err) {
+                console.log('No session found session', err);
+                res.statusCode = 401;
+                res.statusMessage = 'User is unauthorized.';
+                return (0, exports.responseBodyBuilder)(res);
+            }
+            if (!!session) {
+                console.log('Session found', session);
+                console.log(req.session, 'Request session debug');
+                next();
+            }
+        });
+        return [2 /*return*/];
     });
 }); };
 exports.findSession = findSession;

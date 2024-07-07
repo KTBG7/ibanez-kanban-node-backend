@@ -7,8 +7,6 @@ const User: Model<UserType> = model('User', require('../models/user'));
 const bcrypt = require('bcryptjs');
 
 const login = async (req: any, res: Response, next) =>{
-    await findSession(req, res, next);
-    console.log('LOGIN LOGGER: ', req.session);
     if(req.session.user && req.session.isLoggedIn){
         res.statusCode = 220;
         res.statusMessage = "User has an active session, redirecting to kanban.";
