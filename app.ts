@@ -33,11 +33,10 @@ const mongoStore = new MongoDBStore({
 app.set('trust proxy', 1);
 
 
-
 app.use(cors({
     origin: process.env.UI_DOMAIN,
     credentials: true
-}))
+}));
 
 app.use(helmet())
 
@@ -50,9 +49,7 @@ app.use(session({
     saveUninitialized: false,
     store: mongoStore,
     cookie: { sameSite: "none", path: "/", httpOnly: true, secure: true, maxAge: 30 * 24 * 60 * 60 * 1000 }
-}));
-
-app.set('mongoStore', mongoStore);
+}))
 
 
 
@@ -67,6 +64,5 @@ mongoose.connect(process.env.MONGODB_SECRET).then((res:any)=>{
         console.log(err);
         throw err;
     });
-
 
 

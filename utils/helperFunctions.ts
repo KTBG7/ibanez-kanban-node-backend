@@ -1,5 +1,6 @@
 import { Response } from "express";
 import {BoardType} from "../types/GlobalTypes";
+import {makeCookie} from "connect-mongo/build/main/test/testHelper";
 
 const generateToken = require('../utils/CsrfUtil').generateToken
 export const destroySession = (req)=>{
@@ -8,21 +9,36 @@ export const destroySession = (req)=>{
     });
 }
 
-export const findSession = (sessionToken, req)=>{
-    console.log(req.app.get('mongoStore').all());
-    return req.app.get('mongoStore').get(sessionToken, (err, session)=>{
-        if(err){
-            return false;
+export const findSession = async (sessionToken, req)=>{
+        if(sessionToken === req.sessionID){
+            console.log('equal')
+            return true;
         }
-        if(session){
-            return session;
-        }
-    })
+        return await req.sessionStore.get(sessionToken, async (err, session) => {
+            if (err) {
+                console.log('No session found session', err)
+                return false;
+            }
+            if (session) {
+                console.log('Session found', session)
+                req.session.email = session.email;
+                return await req.sessionStore.destroy(session.id, (err) => {
+                    if (err) {
+                        console.log("Couldn't destroy old session");
+                        return false;
+                    } else {
+                        console.log('Destroyed session');
+                        return true;
+                    }
+                });
+            }
+        })
 }
 
 export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType[])=>{
     if(req){
         const token = generateToken(req, res)
+        makeCookie()
         return res.send({
             statusCode: res.statusCode,
             statusMessage: res.statusMessage,

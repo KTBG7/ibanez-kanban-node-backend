@@ -1,19 +1,12 @@
 import { Response } from "express";
 import {model, Model} from "mongoose";
 import {UserType} from "../types/GlobalTypes";
-import {destroySession, responseBodyBuilder} from "../utils/helperFunctions";
+import {destroySession, findSession, responseBodyBuilder} from "../utils/helperFunctions";
 
 const User: Model<UserType> = model('User', require('../models/user'));
 
 const getUserBoards = async (req: any, res: Response, next)=>{
-    if(!req.session.user || !req.session.isLoggedIn){
-        res.statusCode = 401;
-        res.statusMessage = 'User is not authenticated';
-        if(req.session.user){
-            await destroySession(req)
-        }
-        return responseBodyBuilder(res)
-    }
+    if(req.session.isLoggedIn && req.session.user){
         return User.findOne({email: req.session.user})
             .then((user)=>{
                 res.statusCode = 200;
@@ -26,6 +19,13 @@ const getUserBoards = async (req: any, res: Response, next)=>{
                 res.statusMessage = "Downstream Error";
                 return responseBodyBuilder(res);
             });
+    }
+    res.statusCode = 401;
+    res.statusMessage = 'User is not authenticated';
+    if(req.session.user && !req.session.isLoggedIn){
+        await destroySession(req)
+    }
+    return responseBodyBuilder(res)
 }
 
 const postUserBoards = async (req:any, res: Response, next)=>{

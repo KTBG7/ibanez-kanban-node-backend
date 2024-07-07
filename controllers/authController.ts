@@ -7,19 +7,24 @@ const User: Model<UserType> = model('User', require('../models/user'));
 const bcrypt = require('bcryptjs');
 
 const login = async (req: any, res: Response, next) =>{
-    console.log(req.headers['kanban_user'])
-    if(req.headers['kanban_user']){
-        const session  = await findSession(req.headers['kanban_user'], req);
-        console.log(session)
-        if(session) {
-            req.session = session;
-            res.statusCode = 200;
-            res.statusMessage = "User has logged in."
+    if(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1){
+        const sessionFound = await findSession(req.headers['kanban_user'], req);
+        console.log('sessionFound', sessionFound);
+        if(sessionFound){
+            res.statusCode = 220;
+            res.statusMessage = "User has an active session, redirecting to kanban.";
+            await req.session.save((err)=>{
+                if(err){
+                    console.log('Error saving', err);
+                }
+            });
+            console.log('220 executed')
             return responseBodyBuilder(res, req);
         }
-        res.statusCode = 210;
-        res.statusMessage = "Session Expired, please log in again!";
-        return responseBodyBuilder(res);
+        res.statusCode = 230;
+        res.statusMessage = "User has expired token.";
+        return responseBodyBuilder(res, req);
+
     }
     return User.findOne({email: req.body.email})
         .then((user)=>{
@@ -29,7 +34,7 @@ const login = async (req: any, res: Response, next) =>{
                 return responseBodyBuilder(res);
             }
             bcrypt.compare(req.body.password, user.password)
-                .then(async (validPassword) => {
+                .then((validPassword) => {
                     if (!validPassword) {
                         res.statusCode = 401;
                         res.statusMessage = "Incorrect password, please try again.";
@@ -39,9 +44,11 @@ const login = async (req: any, res: Response, next) =>{
                     req.session.user = req.body.email;
                     res.statusCode = 200;
                     res.statusMessage = "User Logged In.";
-                    await req.session.save(err => {
-                        console.log(err);
-                    });
+                    req.session.save((err)=>{
+                        if(err){
+                            console.log('Error saving', err);
+                        }
+                    })
                     return responseBodyBuilder(res, req)
                 })
                 .catch((err)=>{
@@ -54,7 +61,24 @@ const login = async (req: any, res: Response, next) =>{
 
 }
 
-const signup = (req:any, res: Response, next) =>{
+const signup = async (req:any, res: Response, next) =>{
+    if(req.headers['kanban_user'] && req.headers['kanban_user'].length > 1){
+        const sessionFound = await findSession(req.headers['kanban_user'], req);
+        if(sessionFound){
+            res.statusCode = 220;
+            res.statusMessage = "User has an active session, redirecting to kanban.";
+            await req.session.save((err)=>{
+                if(err){
+                    console.log('Error saving', err);
+                }
+            })
+            return responseBodyBuilder(res, req);
+        }
+        res.statusCode = 230;
+        res.statusMessage = "User has expired token.";
+        return responseBodyBuilder(res, req);
+
+    }
     return User.findOne({email: req.body.email})
         .then((user)=>{
             if(user){
@@ -91,9 +115,11 @@ const signup = (req:any, res: Response, next) =>{
                     res.statusMessage = "User has been created.";
                     req.session.user = req.body.email;
                     req.session.isLoggedIn = true;
-                    await req.session.save(err => {
-                        console.log(err);
-                    });
+                    await req.session.save((err)=>{
+                        if(err){
+                            console.log('Error saving', err);
+                        }
+                    })
                     return responseBodyBuilder(res, req);
                 });
             })

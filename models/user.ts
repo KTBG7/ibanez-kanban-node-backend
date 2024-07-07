@@ -1,5 +1,4 @@
 import { Schema } from 'mongoose';
-import {BoardType} from "../types/GlobalTypes";
 
 const userSchema = new Schema({
     email: {
