@@ -37,7 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.responseBodyBuilder = exports.findSession = exports.destroySession = void 0;
-var testHelper_1 = require("connect-mongo/build/main/test/testHelper");
 var generateToken = require('../utils/CsrfUtil').generateToken;
 var destroySession = function (req) {
     return req.session.destroy(function (err) {
@@ -87,7 +86,6 @@ exports.findSession = findSession;
 var responseBodyBuilder = function (res, req, boards) {
     if (req) {
         var token = generateToken(req, res);
-        (0, testHelper_1.makeCookie)();
         return res.send({
             statusCode: res.statusCode,
             statusMessage: res.statusMessage,

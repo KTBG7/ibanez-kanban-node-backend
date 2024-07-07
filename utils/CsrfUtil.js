@@ -4,7 +4,11 @@ var doubleCsrfUtilities = require('csrf-csrf').doubleCsrf({
     cookieOptions: {
         sameSite: "none", // Recommend you make this strict if posible
         path: "/",
-        secure: true
+        secure: true,
+        signed: true,
+    },
+    getTokenFromRequest: function (req) {
+        return req.headers["x-csrf-token"];
     },
     size: 64,
     ignoredMethods: ["GET", "HEAD", "OPTIONS"],

@@ -1,6 +1,5 @@
 import { Response } from "express";
 import {BoardType} from "../types/GlobalTypes";
-import {makeCookie} from "connect-mongo/build/main/test/testHelper";
 
 const generateToken = require('../utils/CsrfUtil').generateToken
 export const destroySession = (req)=>{
@@ -38,7 +37,6 @@ export const findSession = async (sessionToken, req)=>{
 export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType[])=>{
     if(req){
         const token = generateToken(req, res)
-        makeCookie()
         return res.send({
             statusCode: res.statusCode,
             statusMessage: res.statusMessage,
