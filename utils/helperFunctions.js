@@ -66,6 +66,7 @@ var findSession = function (req, res, next) {
                 }
                 else {
                     console.log('Old Session destroyed!');
+                    console.log('Current session', req.session);
                 }
                 return next();
             });

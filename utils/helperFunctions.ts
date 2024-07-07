@@ -65,6 +65,7 @@ export const findSession = (req, res, next: NextFunction)=>{
                             console.log('There was an error destroying old session');
                         }else{
                             console.log('Old Session destroyed!');
+                            console.log('Current session', req.session);
                         }
                         return next();
                     });
