@@ -44,20 +44,20 @@ export const responseBodyBuilder = (res: Response, req?: any, boards?: BoardType
 }
 
 export const findSession = (req, res, next)=>{
-    console.log(req.method);
-        if( req.method === 'OPTIONS'){
+        if( req.method.toUpperCase() === 'OPTIONS'){
             next();
         }
         const sessionToken = req.headers['kanban_user'];
         if (sessionToken.length < 1) {
             console.log("Empty User ID");
-            next()
+            next();
         }
         if(sessionToken === req.sessionID){
             console.log('equal')
-            next()
+            next();
         }
-        req.sessionStore.get(sessionToken, (err, session) => {
+        console.log(req.method, 'Made it through');
+        return req.sessionStore.get(sessionToken, (err, session) => {
             if (err) {
                 console.log('No session found session', err);
                 res.statusCode = 401;

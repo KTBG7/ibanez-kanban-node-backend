@@ -43,8 +43,7 @@ var responseBodyBuilder = function (res, req, boards) {
 };
 exports.responseBodyBuilder = responseBodyBuilder;
 var findSession = function (req, res, next) {
-    console.log(req.method);
-    if (req.method === 'OPTIONS') {
+    if (req.method.toUpperCase() === 'OPTIONS') {
         next();
     }
     var sessionToken = req.headers['kanban_user'];
@@ -56,7 +55,8 @@ var findSession = function (req, res, next) {
         console.log('equal');
         next();
     }
-    req.sessionStore.get(sessionToken, function (err, session) {
+    console.log(req.method, 'Made it through');
+    return req.sessionStore.get(sessionToken, function (err, session) {
         if (err) {
             console.log('No session found session', err);
             res.statusCode = 401;
