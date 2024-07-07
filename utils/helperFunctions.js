@@ -63,16 +63,17 @@ var findSession = function (req, res, next) {
                 res.statusMessage = 'User is unauthorized.';
                 return (0, exports.responseBodyBuilder)(res);
             }
-            if (!!session) {
+            else {
                 req.sessionStore.destroy(session.id, function (err) {
                     if (err) {
                         console.log('There was an error destroying old session');
+                        next();
                     }
                     else {
                         console.log('Old Session destroyed!');
+                        next();
                     }
                 });
-                next();
             }
         });
     }
